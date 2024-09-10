@@ -1,0 +1,20 @@
+.nav-link {
+	color: #fff;
+	border-radius: 5px;
+}
+
+.nav-link:hover {
+	background-color: #6d6d6d;
+	color: #000;
+	padding: 0.5rem;
+}
+
+.nav-link:visited {
+	color: #fff;
+}
+
+.nav-link:focus {
+	color: rgb(255, 251, 0);
+}
+
+/* No agregar nuevos estilos en este archivo */
