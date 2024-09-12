@@ -1,0 +1,28 @@
+{
+	"name": "bootcamp-cilsa_proyecto-final_to-do-list",
+	"version": "1.0.0",
+	"description": "aplicación to-do-list (lista de tareas)",
+	"type": "module",
+	"main": "src/app.js",
+	"scripts": {
+		"start": "node src/app.js",
+		"test": "node --watch src/app.js"
+	},
+	"keywords": [
+		"lista",
+		"lista de tareas",
+		"to do list",
+		"HTML",
+		"CSS",
+		"Bootstrap",
+		"Javascript",
+		"Node.js",
+		"Express.js",
+		"Bootcamp Cilsa"
+	],
+	"author": "Dardo Santana, Lautaro de la Mano, Fernando Barrionuevo y Mario Aguilar",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.21.0"
+	}
+}

@@ -1,11 +1,16 @@
+.nav-item {
+	margin: 0.2rem;
+}
+
 .nav-link {
 	color: #fff;
 	border-radius: 5px;
+	margin: 0.3rem;
 }
 
 .nav-link:hover {
 	background-color: #6d6d6d;
-	color: #000;
+	color: #fff;
 	padding: 0.5rem;
 }
 
@@ -17,4 +22,15 @@
 	color: rgb(255, 251, 0);
 }
 
+.navbar-toggler {
+	border: 1px solid #fff;
+}
+
+.navbar-brand img {
+	border-radius: 8px;
+}
+
+.footer-link:hover {
+	border-bottom: 2px solid #1868aa;
+}
 /* No agregar nuevos estilos en este archivo */
