@@ -4,10 +4,10 @@
 
 ## Integrantes del Equipo
 
-[Lautaro de la Mano](https://github.com/Lautidelamano)
-[Fernando Barrionuevo](https://github.com/Rasta0705)
-[Dardo Santana](https://github.com/dardosantana)
-[Mario Aguilar](https://github.com/mario-r-aguilar)
+- [Lautaro de la Mano](https://github.com/Lautidelamano)
+- [Fernando Barrionuevo](https://github.com/Rasta0705)
+- [Dardo Santana](https://github.com/dardosantana)
+- [Mario Aguilar](https://github.com/mario-r-aguilar)
 
 ## Descripción del proyecto
 
@@ -45,7 +45,7 @@ segunda sección. No hay vinculación directa entre las dos secciones.
 
 ![muestra una captura de la página de inicio](./public/img/proyect-docs/captura-inicio.webp)
 
-== AGREGAR AQUI EL RESTO DE CAPTURAS DEL SITIO ==
+> AGREGAR AQUI EL RESTO DE CAPTURAS DEL SITIO
 
 ### Tecnologías del frontend
 
