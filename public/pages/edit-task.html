@@ -76,7 +76,95 @@
 		<main class="mt-5 mb-5">
 			<div class="container">
 				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
-				EDITAR TAREA
+				
+			
+			<h1 class="text-center mb-5 mt-5">EDITAR TAREA</h1>
+			
+
+			<div class="row d-flex justify-content-center mt-3">
+				<form
+					id="consultaForm"
+					class="col-12 col-md-4 shadow border-light border p-4 rounded mb-3"
+				>
+					<div class="container p-2 m-2">
+						<div class="mb-3 mt-3">
+							<label for="titulo" class="form-label">Titulo:</label>
+							<input
+								type="text"
+								class="form-control border border-dark"
+								id="titulo"
+								placeholder="Introduce titulo de la nueva tarea"
+								name="titulo"
+								required
+							/>
+							<div class="valid-feedback">Valido.</div>
+							<div class="invalid-feedback">Contenido invalido.</div>
+						</div>
+						<div class="mb-3 mt-3">
+							<label for="descripcion" class="form-label">Descripción:</label>
+							<input
+								type="text"
+								class="form-control border border-dark"
+								id="descripcion"
+								placeholder="Introduce una descripción de la tarea "
+								name="descripcion"
+								required
+							/>
+							<div class="valid-feedback">Valido.</div>
+							<div class="invalid-feedback">Contenido invalido.</div>
+						</div>
+						<div class="row d-flex justify-content-center mt-3">
+							<form
+								id="consultaForm"
+								class="col-12 col-md-4 shadow border-light border p-4 rounded mb-3"
+							>
+								<div class="container p-2 m-2">
+									<div class="mb-3 mt-3">
+										<label for="estado" class="form-label">Estado:</label>
+										<input
+											type="text"
+											class="form-control border border-dark"
+											id="titulo"
+											placeholder="Selecciona el estado de la tarea"
+											name="estado"
+											required
+										/>
+									</div>
+									<div class="mb-3 mt-3">
+										<label for="opciones">Elige una opción:</label>
+										<select id="opciones" name="opciones" class="form-control border border-dark">
+											<option value="" disabled selected>Seleccione una opción</option>
+											<option value="opcion1">En curso</option>
+											<option value="opcion2">Pendiente</option>
+											<option value="opcion3">Bloqueada</option>
+											<option value="opcion3">Completada</option>
+
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+						
+						
+
+									</div>
+						
+						<div style="text-align: center; display: flex; justify-content: center; gap: 10px;">
+							<button type="submit" class="btn botonModificar btn-primary mt-3">
+								Modificar
+							</button>
+							<button type="submit" class="btn botonBorrar btn-primary mt-3">
+								Borrar
+							</button>
+							<button type="submit" class="btn botonCancelar btn-primary mt-3">
+								Cancelar
+							</button>
+						</div>
+						
+						</div>
+					</div>
+				</form>
+			</div>
 			</div>
 		</main>
 
