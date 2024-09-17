@@ -1,20 +1,28 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import getDirname from './utils/dirname.utils.js';
+import userRouter from './routes/user.routes.js';
+import taskRouter from './routes/task.routes.js';
 
 const app = express();
+const __dirname = getDirname(import.meta.url); // obtiene el directorio actual
 
-// configuro carpeta de archivos estáticos
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// manejo de json en urls
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// carpeta de archivos estáticos
 app.use(express.static(path.join(__dirname, '../public')));
 
-// configuro ruta principal de la aplicación
+// ruta principal
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
+// rutas para api
+app.use('/api/user', userRouter);
+app.use('/api/task', taskRouter);
 
-// ejecuto el servidor
+// ejecución del servidor
 const PORT = 3000;
 app.listen(PORT, () => {
 	console.log(`Server run on http://localhost:${PORT}`);

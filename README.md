@@ -49,11 +49,13 @@ segunda sección. No hay vinculación directa entre las dos secciones.
 
 ### Tecnologías del frontend
 
-- **HTML**: Se utilizó en la estructura semántica del sitio.
-- **CSS**: Se empleo principalmente para personalizar la navbar y footer.
-- **Bootstrap**: Se uso para aplicar estilos a las páginas y para lograr que sean responsive.
-- **Javascript**: Se empleo para realizar las validaciones de los formularios y para lograr dinamismo en la web.
-- **Datatables**: Se utilizó para mostrar el listado de tareas y agregar controles interactivos a la tabla.
+- **HTML**: Se utiliza en la estructura semántica del sitio.
+- **CSS**: Se emplea principalmente para personalizar la navbar y footer.
+- **Bootstrap v5.2.3**: Se usa para aplicar estilos a las páginas y para lograr que sean responsive.
+- **Javascript**: Se emplea para realizar las validaciones de los formularios y para lograr dinamismo en la web.
+- **Datatables v1.13.5**: Se utiliza para mostrar el listado de tareas y agregar controles interactivos a la tabla.
+- **jQuery v3.6.0**: Se usa como complemento necesario de Datatables.
+- **Bootstrap v4.5.2**: Se usa como complemento necesario de Datatables.
 
 ---
 
