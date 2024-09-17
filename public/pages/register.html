@@ -68,12 +68,80 @@
 		</header>
 
 		<main class="mt-5 mb-5">
-			<div class="container">
+			<div class="container mb-5 pb-">
 				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
-				REGISTRO DE USUARIO
+				<h2 class="text-center mb-4">Registro de Usuario</h2>
+				<div class="row d-flex justify-content-center mt-3">
+					<form
+						id="registroForm"
+						class="col-12 col-md-6 shadow border-light border p-4 rounded mb-3"
+					>
+						<div class="container p-2 m-2">
+							<div class="mb-3 mt-3">
+								<label for="nombre" class="form-label">Nombre:</label>
+								<input
+									type="text"
+									class="form-control border border-dark"
+									id="nombre"
+									placeholder="Introduce tu nombre"
+									name="nombre"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div class="mb-3 mt-3">
+								<label for="apellido" class="form-label">Apellido:</label>
+								<input
+									type="text"
+									class="form-control border border-dark"
+									id="apellido"
+									placeholder="Introduce tu apellido"
+									name="apellido"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div class="mb-3 mt-3">
+								<label for="username" class="form-label">Username:</label>
+								<input
+									type="text"
+									class="form-control border border-dark"
+									id="username"
+									placeholder="Introduce tu username"
+									name="username"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div class="mb-3 mt-3">
+								<label for="password" class="form-label">Password:</label>
+								<input
+									type="password"
+									class="form-control border border-dark"
+									id="password"
+									placeholder="Introduce tu password"
+									name="password"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div style="text-align: center; display: flex; justify-content: center; gap: 10px;">
+								<button type="submit" class="btn btn-primary mt-3">
+									Registrar
+								</button>
+								<button type="reset" class="btn btn-secondary mt-3">
+									Cancelar
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</main>
-
 		<footer>
 			<div class="container-fluid bg-dark text-light py-3">
 				<div class="row text-center">
