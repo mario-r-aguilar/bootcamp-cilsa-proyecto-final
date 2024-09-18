@@ -32,3 +32,11 @@ const dataTableOptions = {
 $(document).ready(function() {
     $('#example').DataTable(dataTableOptions);
 });
+
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    // Agregar borrado de la tarea
+    console.log('Elemento eliminado');
+    var modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+    modal.hide();
+  });
