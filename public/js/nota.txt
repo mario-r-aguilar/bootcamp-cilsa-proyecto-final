@@ -1,1 +1,0 @@
-En esta se incluiran los archivos javascript del frontend

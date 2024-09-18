@@ -32,7 +32,7 @@
 					<a class="navbar-brand" href="../index.html">
 						<img
 							src="../img/logo_bco.webp"
-							alt="Bootstrap"
+							alt="logo de Tech Nexus, empresa de desarrollo"
 							width="75"
 							height="75"
 						/>
@@ -51,15 +51,15 @@
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav m-auto">
 							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="../index.html"
-									>Inicio</a
-								>
+								<a class="nav-link" href="../index.html">Inicio</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="./register.html">Registrarse</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="./login.html">Login</a>
+								<a class="nav-link" aria-current="page" href="./login.html"
+									>Login</a
+								>
 							</li>
 						</ul>
 					</div>
@@ -68,9 +68,63 @@
 		</header>
 
 		<main class="mt-5 mb-5">
-			<div class="container">
+			<div class="container mb-5 pb-5">
 				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
-				LOGUEO DE USUARIO
+				<h1 class="text-center mb-5">Logueo de Usuario</h1>
+				<div class="row d-flex justify-content-center mt-3">
+					<form
+						id="loginForm"
+						class="col-12 col-md-6 shadow border-light border p-4 rounded mb-5 mt-2"
+					>
+						<div
+							id="success-message"
+							class="d-none alert alert-success mt-3"
+						></div>
+						<div class="container p-2 m-3 mb-5">
+							<div class="mb-5 mt-2">
+								<label for="user_name" class="form-label">Usuario:</label>
+								<input
+									type="text"
+									class="form-control border border-dark"
+									id="user_name"
+									placeholder="Introduce tu usuario"
+									name="user_name"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div class="mb-5 mt-3">
+								<label for="user_pass" class="form-label">Password:</label>
+								<input
+									type="password"
+									class="form-control border border-dark"
+									id="user_pass"
+									placeholder="Introduce tu password"
+									name="user_pass"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div
+								style="
+									text-align: center;
+									display: flex;
+									justify-content: center;
+									gap: 10px;
+								"
+							>
+								<button type="submit" class="btn btn-primary mt-3">
+									Acceder
+								</button>
+								<button type="reset" class="btn btn-secondary mt-3">
+									Borrar
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</main>
 
@@ -138,5 +192,6 @@
 			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 			crossorigin="anonymous"
 		></script>
+		<script src="../js/form-validation.js"></script>
 	</body>
 </html>
