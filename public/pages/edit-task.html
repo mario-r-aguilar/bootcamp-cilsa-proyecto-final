@@ -118,21 +118,10 @@
 								id="consultaForm"
 								class="col-12 col-md-4 shadow border-light border p-4 rounded mb-3"
 							>
-								<div class="container p-2 m-2">
+							
 									<div class="mb-3 mt-3">
-										<label for="estado" class="form-label">Estado:</label>
-										<input
-											type="text"
-											class="form-control border border-dark"
-											id="titulo"
-											placeholder="Selecciona el estado de la tarea"
-											name="estado"
-											required
-										/>
-									</div>
-									<div class="mb-3 mt-3">
-										<label for="opciones">Elige una opción:</label>
-										<select id="opciones" name="opciones" class="form-control border border-dark">
+										<label for="estado">Estado:</label>
+										<select id="estado" name="estado" class="form-control border border-dark">
 											<option value="" disabled selected>Seleccione una opción</option>
 											<option value="opcion1">En curso</option>
 											<option value="opcion2">Pendiente</option>
@@ -143,6 +132,10 @@
 									</div>
 								</div>
 							</form>
+							<div
+							id="success-message"
+							class="d-none alert alert-success mt-3"
+						></div>
 						</div>
 						
 						
@@ -232,5 +225,7 @@
 			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 			crossorigin="anonymous"
 		></script>
+
+		<script src="../js/form-validation.js"></script>
 	</body>
 </html>
