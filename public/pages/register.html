@@ -32,7 +32,7 @@
 					<a class="navbar-brand" href="../index.html">
 						<img
 							src="../img/logo_bco.webp"
-							alt="Bootstrap"
+							alt="logo de Tech Nexus, empresa de desarrollo"
 							width="75"
 							height="75"
 						/>
@@ -51,12 +51,12 @@
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav m-auto">
 							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="../index.html"
-									>Inicio</a
-								>
+								<a class="nav-link" href="../index.html">Inicio</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="./register.html">Registrarse</a>
+								<a class="nav-link" aria-current="page" href="./register.html"
+									>Registrarse</a
+								>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="./login.html">Login</a>
@@ -70,71 +70,82 @@
 		<main class="mt-5 mb-5">
 			<div class="container mb-5 pb-">
 				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
-				<h2 class="text-center mb-4">Registro de Usuario</h2>
+				<h1 class="text-center mb-4">Registro de Usuario</h1>
 				<div class="row d-flex justify-content-center mt-3">
 					<form
 						id="registroForm"
 						class="col-12 col-md-6 shadow border-light border p-4 rounded mb-3"
 					>
+						<div
+							id="success-message"
+							class="d-none alert alert-success mt-3"
+						></div>
 						<div class="container p-2 m-2">
 							<div class="mb-3 mt-3">
-								<label for="nombre" class="form-label">Nombre:</label>
+								<label for="user_firstname" class="form-label">Nombre:</label>
 								<input
 									type="text"
 									class="form-control border border-dark"
-									id="nombre"
+									id="user_firstname"
 									placeholder="Introduce tu nombre"
-									name="nombre"
+									name="user_firstname"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3 mt-3">
-								<label for="apellido" class="form-label">Apellido:</label>
+								<label for="user_lastname" class="form-label">Apellido:</label>
 								<input
 									type="text"
 									class="form-control border border-dark"
-									id="apellido"
+									id="user_lastname"
 									placeholder="Introduce tu apellido"
-									name="apellido"
+									name="user_lastname"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3 mt-3">
-								<label for="username" class="form-label">Username:</label>
+								<label for="user_name" class="form-label">Username:</label>
 								<input
 									type="text"
 									class="form-control border border-dark"
-									id="username"
-									placeholder="Introduce tu username"
-									name="username"
+									id="user_name"
+									placeholder="Introduce tu usuario"
+									name="user_name"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3 mt-3">
-								<label for="password" class="form-label">Password:</label>
+								<label for="user_pass" class="form-label">Password:</label>
 								<input
 									type="password"
 									class="form-control border border-dark"
-									id="password"
+									id="user_pass"
 									placeholder="Introduce tu password"
-									name="password"
+									name="user_pass"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
-							<div style="text-align: center; display: flex; justify-content: center; gap: 10px;">
+							<div
+								style="
+									text-align: center;
+									display: flex;
+									justify-content: center;
+									gap: 10px;
+								"
+							>
 								<button type="submit" class="btn btn-primary mt-3">
 									Registrar
 								</button>
 								<button type="reset" class="btn btn-secondary mt-3">
-									Cancelar
+									Borrar
 								</button>
 							</div>
 						</div>
@@ -206,5 +217,6 @@
 			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 			crossorigin="anonymous"
 		></script>
+		<script src="../js/form-validation.js"></script>
 	</body>
 </html>

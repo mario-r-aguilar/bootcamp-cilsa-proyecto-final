@@ -78,7 +78,7 @@ modifican las tareas se registra la fecha y hora automáticamente
 atributos obligatorios **task_title** y **task_description**, tiene **task_status**, donde
 solo se admiten los siguientes estados: pending, in progress, blocked y finished.
 
-![muestra una captura de la tabla o entidad llamada user y sus atributos](./public/img/proyect-docs/task-table.webp)
+![muestra una captura de la tabla o entidad llamada user y sus atributos](./public/img/proyect-docs/user-task.webp)
 
 Esta tabla representa la entidad User, la cual contiene los datos del usuario.
 Los atributos que contiene esta tabla son: el nombre de usuario (**user_name**), el cual debe
