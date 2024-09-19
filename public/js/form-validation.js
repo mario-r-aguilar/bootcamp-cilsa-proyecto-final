@@ -38,14 +38,31 @@ const formValidations = () => {
 
 				if (isValid) {
 					const successMessage = document.getElementById('success-message');
+					const successMessageUpdateTask = document.getElementById(
+						'success-message-update-task'
+					);
 
-					successMessage.classList.remove('d-none');
-					successMessage.innerHTML = 'Formulario enviado correctamente.';
+					if (successMessage) {
+						successMessage.classList.remove('d-none');
+						successMessage.innerHTML =
+							'Operación Completada Satisfactoriamente';
+						setTimeout(function () {
+							successMessage.classList.add('d-none');
+							successMessage.innerHTML = '';
+							form.reset();
+						}, 2000);
+					}
 
-					setTimeout(function () {
-						successMessage.classList.add('d-none');
-						successMessage.innerHTML = '';
-					}, 2000);
+					if (successMessageUpdateTask) {
+						successMessageUpdateTask.classList.remove('d-none');
+						successMessageUpdateTask.innerHTML =
+							'Operación Completada Satisfactoriamente';
+						setTimeout(function () {
+							successMessageUpdateTask.classList.add('d-none');
+							successMessageUpdateTask.innerHTML = '';
+							form.reset();
+						}, 2000);
+					}
 				}
 			});
 		});

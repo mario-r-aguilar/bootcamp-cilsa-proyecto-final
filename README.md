@@ -22,20 +22,16 @@ editarlas, eliminarlas y también puede editar sus datos registrados si lo desea
 
 El sitio se divide en dos secciones, la primera compuesta de una página **Inicio**,
 una para **Registrarse** y una para el **Login**.
-La segunda sección contiene la página del **Perfil**, donde verá el listado de tareas
-y tendrá un botón en cada una para modificarlas o eliminarlas. También cuenta con
-una página para **Agregar Tareas**, otra para **Editar sus Datos de Registro**
-y el botón para **Desloguearse**.
-A la mencionada segunda sección solo se puede acceder si el empleado está logueado.
+La segunda sección contiene la página del **Perfil**, donde verá el listado de tareas,
+podrá crear una nueva, modificar las existentes o eliminarlas. Los formularios para
+estas acciones se abriran en modales dentro de la misma página. También cuenta con
+una página para **Editar sus Datos de Registro** y el botón para **Desloguearse**.
 
 ### Navegabilidad
 
-Aquí se puede apreciar que hay una interacción plena entre las páginas de la
-primer sección. Mientras que en la segunda sección, donde solo se accede cuando el
-empleado está logueado, hay interacción plena entre _Mi Perfil_, _Agregar Tarea_ y
-_Editar Perfil_, pero a la página _Editar Tarea_ solo se puede acceder desde _Mi Perfil_.
-Sin embargo, desde _Editar Tarea_ si es posible acceder al resto de páginas de la
-segunda sección. No hay vinculación directa entre las dos secciones.
+Aquí se puede apreciar una interacción plena entre las páginas que pertenecen
+a cada sección. A la segunda sección solo se puede acceder si el empleado está logueado,
+ya que no hay vinculación directa entre las dos secciones.
 
 ![muestra la navegabilidad del sitio, tal cual como se describió en el párrafo anterior](./public/img/proyect-docs/navegabilidad.webp)
 
@@ -43,9 +39,29 @@ segunda sección. No hay vinculación directa entre las dos secciones.
 
 **Inicio**
 
-![muestra una captura de la página de inicio](./public/img/proyect-docs/captura-inicio.webp)
+![muestra una captura de la página inicio](./public/img/proyect-docs/captura-inicio.webp)
 
-> AGREGAR AQUI EL RESTO DE CAPTURAS DEL SITIO
+**Registrarse**
+
+![muestra una captura de la página registrarse](./public/img/proyect-docs/captura-registro.webp)
+
+**Login**
+
+![muestra una captura de la página login](./public/img/proyect-docs/captura-login.webp)
+
+**Mi perfil**
+
+![muestra una captura de la página mi perfil](./public/img/proyect-docs/captura-perfil-1.webp)
+
+![muestra una captura de la página mi perfil con el modal para agregar tarea](./public/img/proyect-docs/captura-perfil-2.webp)
+
+![muestra una captura de la página mi perfil con el modal para editar tarea](./public/img/proyect-docs/captura-perfil-3.webp)
+
+![muestra una captura de la página mi perfil con el modal para eliminar tarea](./public/img/proyect-docs/captura-perfil-4.webp)
+
+**Editar perfil**
+
+![muestra una captura de la página editar perfil](./public/img/proyect-docs/captura-editar-perfil.webp)
 
 ### Tecnologías del frontend
 
