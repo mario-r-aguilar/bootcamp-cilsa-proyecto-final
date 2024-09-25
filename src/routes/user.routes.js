@@ -1,21 +1,21 @@
 import { Router } from 'express';
 import {
-	getUsers,
-	getUserById,
-	registerUser,
-	updateUser,
-	deleteUser,
+	getAllUsers,
+	getOneUserById,
+	registerOneUser,
+	updateOneUser,
+	deleteOneUser,
 	loginUser,
 	logoutUser,
 } from '../controllers/user.controller.js';
 
 const userRouter = Router();
 
-userRouter.get('/', getUsers);
-userRouter.get('/:uid', getUserById);
-userRouter.post('/register', registerUser);
-userRouter.put('/:uid', updateUser);
-userRouter.delete('/:uid', deleteUser);
+userRouter.get('/', getAllUsers);
+userRouter.get('/:uid', getOneUserById);
+userRouter.post('/register', registerOneUser);
+userRouter.put('/:uid', updateOneUser);
+userRouter.delete('/:uid', deleteOneUser);
 userRouter.post('/login', loginUser);
 userRouter.post('/logout', logoutUser);
 
