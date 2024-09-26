@@ -1,5 +1,3 @@
-import path from 'path';
-import getDirname from '../utils/dirname.utils.js';
 import {
 	getTasks,
 	getTaskById,
@@ -12,6 +10,14 @@ import {
 export const getAllTasks = async (req, res) => {
 	try {
 		const listOfTask = await getTasks();
+
+		if (tasks.length === 0) {
+			return res.status(200).send({
+				status: 'success',
+				message: "No tasks found (controller's message)",
+				tasks: [],
+			});
+		}
 
 		res.status(200).send(listOfTask);
 	} catch (error) {
@@ -30,8 +36,12 @@ export const getOneTaskById = async (req, res) => {
 		const { id } = req.params;
 
 		if (!id) {
-			return res.status(400).send("ID is required (controller's error)");
+			return res.status(400).send({
+				status: 'error',
+				message: "ID is required (controller's error)",
+			});
 		}
+
 		const task = await getTaskById(id);
 
 		if (!task)
@@ -66,7 +76,8 @@ export const createOneTask = async (req, res) => {
 		if (!newTask) {
 			return res.status(400).send({
 				status: 'error',
-				message: 'The task could not be created in the database',
+				message:
+					"The task could not be created in the database (controller's error)",
 			});
 		}
 
@@ -87,7 +98,21 @@ export const updateOneTask = async (req, res) => {
 		const { id } = req.params;
 		const taskData = req.body;
 
+		if (!id) {
+			return res.status(400).send({
+				status: 'error',
+				message: "ID is required (controller's error)",
+			});
+		}
+
 		const taskUpdated = await updateTask(id, taskData);
+
+		if (!taskUpdated) {
+			return res.status(400).send({
+				status: 'error',
+				message: "Invalid task ID (controller's error)",
+			});
+		}
 
 		if (taskUpdated.affectedRows === 0) {
 			return res.status(404).send({
@@ -99,7 +124,7 @@ export const updateOneTask = async (req, res) => {
 
 		res.status(200).send({
 			status: 'success',
-			message: 'Updated task',
+			message: "Updated task (controller's message)",
 		});
 	} catch (error) {
 		console.error(error);
@@ -115,18 +140,33 @@ export const updateOneTask = async (req, res) => {
 export const deleteOneTask = async (req, res) => {
 	try {
 		const { id } = req.params;
+
+		if (!id) {
+			return res.status(400).send({
+				status: 'error',
+				message: "ID is required (controller's error)",
+			});
+		}
+
 		const taskDeleted = await deleteTask(id);
 
-		if (taskDeleted.affectedRows === 0) {
-			return res.status(404).send({
+		if (!taskDeleted) {
+			return res.status(400).send({
 				status: 'error',
-				message: 'Task not found. No tasks were deleted',
+				message: "Invalid task ID (controller's error)",
+			});
+		}
+
+		if (taskDeleted.affectedRows === 0) {
+			return res.status(400).send({
+				status: 'error',
+				message: "No tasks were deleted (controller's error)",
 			});
 		}
 
 		res.status(200).send({
 			status: 'success',
-			message: 'Deleted task',
+			message: "Deleted task (controller's message)",
 		});
 	} catch (error) {
 		console.error(error);

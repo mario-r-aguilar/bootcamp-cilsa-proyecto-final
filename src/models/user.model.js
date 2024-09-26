@@ -31,8 +31,27 @@ export const getUserById = async (user_id) => {
 
 export const getUserByUserName = async (user_name) => {
 	try {
-		// dentro de try
-		// va la lógica del modelo
+		if (!user_name) {
+			console.error({
+				status: 'error',
+				message: "Invalid username (model's error)",
+			});
+			return null;
+		}
+
+		const [user] = await connection.execute(
+			'SELECT * FROM user_table WHERE user_name = ?',
+			[user_name]
+		);
+
+		if (user.length === 0) {
+			console.error({
+				status: 'error',
+				message: "The user does not found (model's error)",
+			});
+			return null;
+		}
+		return user;
 	} catch (error) {
 		console.error({
 			status: 'error',
@@ -58,6 +77,18 @@ export const createUser = async (
 			return null;
 		}
 
+		// valida si el usuario ya existe
+		const user = await getUserByUserName(user_name);
+		if (user) {
+			console.error({
+				status: 'error',
+				message:
+					"The username already exists, try another one (controller's error)",
+			});
+			return null;
+		}
+
+		// Hashea password
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(user_pass, salt);
 

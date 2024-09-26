@@ -56,13 +56,13 @@ export const registerOneUser = async (req, res) => {
 			res.status(400).send({
 				status: 'error',
 				message:
-					"It is not possible to register a new user. Parameters are missing (controller's error)",
+					"It is not possible to register a new user. Parameters are missing or the username already exists (controller's error)",
 			});
 		}
 
 		res.status(200).send({
 			status: 'success',
-			message: 'User created successfully',
+			message: "User created successfully (controller's message)",
 		});
 	} catch (error) {
 		console.error(error);
@@ -110,6 +110,7 @@ export const loginUser = async (req, res) => {
 	try {
 		const { user_name, user_pass } = req.body;
 
+		// compara username
 		const user = await getUserByUserName(user_name);
 		if (!user) {
 			return res.status(404).send({
@@ -118,6 +119,7 @@ export const loginUser = async (req, res) => {
 			});
 		}
 
+		// compara password
 		const passwordIsMatch = await bcrypt.compare(user_pass, user.user_pass);
 		if (!passwordIsMatch) {
 			return res.status(401).send({
@@ -126,6 +128,7 @@ export const loginUser = async (req, res) => {
 			});
 		}
 
+		// crea token de sesión
 		const token = jwt.sign(
 			{
 				username: user.user_name,
@@ -136,14 +139,18 @@ export const loginUser = async (req, res) => {
 			{ expiresIn: '1h' }
 		);
 
+		// almacena token en cookie
 		res.cookie('token', token, {
 			httpOnly: true,
-			secure: environment.secure_cookie, // Indica si solo se envía a través de https
+			secure: environment.secure_cookie, // Solo se envía a través de https si es true
 			sameSite: 'Strict', // Protege contra CSRF
 			maxAge: 3600000, // Expira en 1 hora
 		});
 
-		res.status(200).send({ status: 'success', message: 'Login successful' });
+		res.status(200).send({
+			status: 'success',
+			message: "Login successful (controller's message)",
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -165,7 +172,7 @@ export const logoutUser = async (req, res) => {
 
 		res.status(200).send({
 			status: 'success',
-			message: 'Successfully logged out.',
+			message: "Successfully logged out (controller's message)",
 		});
 	} catch (error) {
 		console.error(error);

@@ -4,6 +4,14 @@ export const getTasks = async () => {
 	try {
 		const [tasks] = await connection.execute('SELECT * FROM task_table');
 
+		if (tasks.length === 0) {
+			console.log({
+				status: 'success',
+				message: "No tasks found in the database (model's message)",
+			});
+			return [];
+		}
+
 		return tasks;
 	} catch (error) {
 		console.error({
@@ -17,6 +25,14 @@ export const getTasks = async () => {
 
 export const getTaskById = async (task_id) => {
 	try {
+		if (!task_id || isNaN(task_id)) {
+			console.error({
+				status: 'error',
+				message: "Invalid task ID (model's error)",
+			});
+			return null;
+		}
+
 		const [task] = await connection.execute(
 			'SELECT * FROM task_table WHERE task_id = ?',
 			[task_id]
@@ -50,12 +66,13 @@ export const createTask = async (
 		if (!user_id || !task_title || !task_description || !task_status) {
 			console.error({
 				status: 'error',
-				message: 'Parameters are missing. All are required.',
+				message:
+					"Parameters are missing. All parameters are required (model's error)",
 			});
 			return null;
 		}
 
-		// verifica que el usuario exista
+		// verifica que el usuario exista ya que es una clave foránea
 		const [user] = await connection.execute(
 			'SELECT * FROM user_table WHERE user_id = ?',
 			[user_id]
@@ -64,7 +81,7 @@ export const createTask = async (
 		if (user.length === 0) {
 			console.error({
 				status: 'error',
-				message: 'User does not exist',
+				message: "User does not exist (model's error)",
 			});
 			return null;
 		}
@@ -89,7 +106,15 @@ export const updateTask = async (task_id, taskData) => {
 	try {
 		const { task_title, task_description, task_status } = taskData;
 
-		// Inicializo un array para los valores a actualizar y otro para las cláusulas SET
+		if (!task_id || isNaN(task_id)) {
+			console.error({
+				status: 'error',
+				message: "Invalid task ID (model's error)",
+			});
+			return null;
+		}
+
+		// Un array es para los valores a actualizar y el otro para las claves para crear la query
 		const updates = [];
 		const values = [];
 
@@ -114,7 +139,7 @@ export const updateTask = async (task_id, taskData) => {
 		if (updates.length === 0) {
 			console.error({
 				status: 'error',
-				message: 'There are no fields to update',
+				message: "There are no fields to update (model's error)",
 			});
 			return null;
 		}
@@ -138,6 +163,14 @@ export const updateTask = async (task_id, taskData) => {
 
 export const deleteTask = async (task_id) => {
 	try {
+		if (!task_id || isNaN(task_id)) {
+			console.error({
+				status: 'error',
+				message: "Invalid task ID (model's error)",
+			});
+			return null;
+		}
+
 		const [taskDeleted] = await connection.execute(
 			'DELETE FROM task_table WHERE task_id = ?',
 			[task_id]

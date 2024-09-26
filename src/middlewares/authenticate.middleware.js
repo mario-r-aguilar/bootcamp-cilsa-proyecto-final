@@ -18,6 +18,9 @@ export const authenticateToken = (req, res, next) => {
 	} catch (error) {
 		return res
 			.status(403)
-			.send({ status: 'error', message: 'Unauthorized. Invalid token' });
+			.send({
+				status: 'error',
+				message: "Unauthorized, invalid token (middleware's error)",
+			});
 	}
 };
