@@ -1,8 +1,10 @@
-import path from 'path';
-import getDirname from '../utils/dirname.utils.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import environment from '../config/env.config.js';
 import {
 	getUsers,
 	getUserById,
+	getUserByUserName,
 	createUser,
 	updateUser,
 	deleteUser,
@@ -41,8 +43,27 @@ export const getOneUserById = async (req, res) => {
 
 export const registerOneUser = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { user_firstname, user_lastname, user_name, user_pass } = req.body;
+
+		const newUser = await createUser(
+			user_firstname,
+			user_lastname,
+			user_name,
+			user_pass
+		);
+
+		if (!newUser) {
+			res.status(400).send({
+				status: 'error',
+				message:
+					"It is not possible to register a new user. Parameters are missing (controller's error)",
+			});
+		}
+
+		res.status(200).send({
+			status: 'success',
+			message: 'User created successfully',
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -87,8 +108,42 @@ export const deleteOneUser = async (req, res) => {
 // logueo
 export const loginUser = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { user_name, user_pass } = req.body;
+
+		const user = await getUserByUserName(user_name);
+		if (!user) {
+			return res.status(404).send({
+				status: 'error',
+				message: "The user does not exist (controller's error)",
+			});
+		}
+
+		const passwordIsMatch = await bcrypt.compare(user_pass, user.user_pass);
+		if (!passwordIsMatch) {
+			return res.status(401).send({
+				status: 'error',
+				message: "Invalid credentials (controller's error)",
+			});
+		}
+
+		const token = jwt.sign(
+			{
+				username: user.user_name,
+				firstname: user.user_firstname,
+				lastname: user.user_lastname,
+			},
+			environment.jwt_secret,
+			{ expiresIn: '1h' }
+		);
+
+		res.cookie('token', token, {
+			httpOnly: true,
+			secure: environment.secure_cookie, // Indica si solo se envía a través de https
+			sameSite: 'Strict', // Protege contra CSRF
+			maxAge: 3600000, // Expira en 1 hora
+		});
+
+		res.status(200).send({ status: 'success', message: 'Login successful' });
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -102,8 +157,16 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		res.clearCookie('token', {
+			httpOnly: true,
+			secure: environment.secure_cookie,
+			sameSite: 'Strict',
+		});
+
+		res.status(200).send({
+			status: 'success',
+			message: 'Successfully logged out.',
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({

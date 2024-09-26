@@ -55,6 +55,7 @@ export const createTask = async (
 			return null;
 		}
 
+		// verifica que el usuario exista
 		const [user] = await connection.execute(
 			'SELECT * FROM user_table WHERE user_id = ?',
 			[user_id]

@@ -35,9 +35,10 @@ export const getOneTaskById = async (req, res) => {
 		const task = await getTaskById(id);
 
 		if (!task)
-			return res
-				.status(404)
-				.send("The task does not exist (controller's error)");
+			return res.status(404).send({
+				status: 'error',
+				message: "The task does not exist (controller's error)",
+			});
 
 		res.status(200).send(task);
 	} catch (error) {
