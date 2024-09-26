@@ -1,4 +1,4 @@
-import { db } from '../config/db.config.js';
+import connection from '../config/db.config.js';
 
 export const getUsers = async () => {
 	try {
@@ -14,7 +14,7 @@ export const getUsers = async () => {
 	}
 };
 
-export const getUserById = async () => {
+export const getUserById = async (user_id) => {
 	try {
 		// dentro de try
 		// va la lógica del modelo
@@ -28,7 +28,12 @@ export const getUserById = async () => {
 	}
 };
 
-export const createUser = async () => {
+export const createUser = async (
+	user_name,
+	user_pass,
+	user_firstname,
+	user_lastname
+) => {
 	try {
 		// dentro de try
 		// va la lógica del modelo
@@ -42,7 +47,7 @@ export const createUser = async () => {
 	}
 };
 
-export const updateUser = async () => {
+export const updateUser = async (user_id, userData) => {
 	try {
 		// dentro de try
 		// va la lógica del modelo
@@ -56,7 +61,7 @@ export const updateUser = async () => {
 	}
 };
 
-export const deleteUser = async () => {
+export const deleteUser = async (user_id) => {
 	try {
 		// dentro de try
 		// va la lógica del modelo

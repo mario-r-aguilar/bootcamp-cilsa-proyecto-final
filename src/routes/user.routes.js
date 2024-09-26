@@ -13,7 +13,7 @@ const userRouter = Router();
 
 userRouter.get('/', getAllUsers);
 userRouter.get('/:uid', getOneUserById);
-userRouter.post('/register', registerOneUser);
+userRouter.post('/', registerOneUser);
 userRouter.put('/:uid', updateOneUser);
 userRouter.delete('/:uid', deleteOneUser);
 userRouter.post('/login', loginUser);

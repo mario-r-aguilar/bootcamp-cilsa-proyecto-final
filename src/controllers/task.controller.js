@@ -11,8 +11,9 @@ import {
 // CRUD
 export const getAllTasks = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const listOfTask = await getTasks();
+
+		res.status(200).send(listOfTask);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -26,8 +27,19 @@ export const getAllTasks = async (req, res) => {
 
 export const getOneTaskById = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { id } = req.params;
+
+		if (!id) {
+			return res.status(400).send("ID is required (controller's error)");
+		}
+		const task = await getTaskById(id);
+
+		if (!task)
+			return res
+				.status(404)
+				.send("The task does not exist (controller's error)");
+
+		res.status(200).send(task);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -41,8 +53,23 @@ export const getOneTaskById = async (req, res) => {
 
 export const createOneTask = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { user_id, task_title, task_description, task_status } = req.body;
+
+		const newTask = await createTask(
+			user_id,
+			task_title,
+			task_description,
+			task_status
+		);
+
+		if (!newTask) {
+			return res.status(400).send({
+				status: 'error',
+				message: 'The task could not be created in the database',
+			});
+		}
+
+		res.status(200).send(newTask);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -56,8 +83,23 @@ export const createOneTask = async (req, res) => {
 
 export const updateOneTask = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { id } = req.params;
+		const taskData = req.body;
+
+		const taskUpdated = await updateTask(id, taskData);
+
+		if (taskUpdated.affectedRows === 0) {
+			return res.status(404).send({
+				status: 'error',
+				message:
+					"The task was not found or nothing was updated (controller's error)",
+			});
+		}
+
+		res.status(200).send({
+			status: 'success',
+			message: 'Updated task',
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -71,8 +113,20 @@ export const updateOneTask = async (req, res) => {
 
 export const deleteOneTask = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { id } = req.params;
+		const taskDeleted = await deleteTask(id);
+
+		if (taskDeleted.affectedRows === 0) {
+			return res.status(404).send({
+				status: 'error',
+				message: 'Task not found. No tasks were deleted',
+			});
+		}
+
+		res.status(200).send({
+			status: 'success',
+			message: 'Deleted task',
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
