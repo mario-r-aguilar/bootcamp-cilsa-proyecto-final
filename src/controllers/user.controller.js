@@ -13,8 +13,17 @@ import {
 // CRUD
 export const getAllUsers = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const listOfUsers = await getUsers();
+
+		if (listOfUsers.length === 0) {
+			return res.status(200).send({
+				status: 'success',
+				message: "No users found (controller's message)",
+				users: [],
+			});
+		}
+
+		res.status(200).send(listOfUsers);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -28,8 +37,24 @@ export const getAllUsers = async (req, res) => {
 
 export const getOneUserById = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { uid } = req.params;
+
+		if (!uid) {
+			return res.status(400).send({
+				status: 'error',
+				message: "ID is required (controller's error)",
+			});
+		}
+
+		const user = await getUserById(uid);
+
+		if (!user)
+			return res.status(404).send({
+				status: 'error',
+				message: "The user does not exist (controller's error)",
+			});
+
+		res.status(200).send(user);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -77,8 +102,37 @@ export const registerOneUser = async (req, res) => {
 
 export const updateOneUser = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { uid } = req.params;
+		const userData = req.body;
+
+		if (!uid) {
+			return res.status(400).send({
+				status: 'error',
+				message: "ID is required (controller's error)",
+			});
+		}
+
+		const userUpdated = await updateUser(uid, userData);
+
+		if (!userUpdated) {
+			return res.status(400).send({
+				status: 'error',
+				message: "Invalid user ID (controller's error)",
+			});
+		}
+
+		if (userUpdated.affectedRows === 0) {
+			return res.status(404).send({
+				status: 'error',
+				message:
+					"The user was not found or nothing was updated (controller's error)",
+			});
+		}
+
+		res.status(200).send({
+			status: 'success',
+			message: "Updated user (controller's message)",
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -92,8 +146,35 @@ export const updateOneUser = async (req, res) => {
 
 export const deleteOneUser = async (req, res) => {
 	try {
-		// dentro de try
-		// va la lógica del controlador
+		const { uid } = req.params;
+
+		if (!uid) {
+			return res.status(400).send({
+				status: 'error',
+				message: "ID is required (controller's error)",
+			});
+		}
+
+		const userDeleted = await deleteUser(uid);
+
+		if (!userDeleted) {
+			return res.status(400).send({
+				status: 'error',
+				message: "Invalid user ID (controller's error)",
+			});
+		}
+
+		if (userDeleted.affectedRows === 0) {
+			return res.status(400).send({
+				status: 'error',
+				message: "No users were deleted (controller's error)",
+			});
+		}
+
+		res.status(200).send({
+			status: 'success',
+			message: "Deleted user (controller's message)",
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
