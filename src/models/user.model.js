@@ -3,8 +3,17 @@ import connection from '../config/db.config.js';
 
 export const getUsers = async () => {
 	try {
-		// dentro de try
-		// va la lógica del modelo
+		const [users] = await connection.execute('SELECT * FROM user_table');
+
+		if (users.length === 0) {
+			console.log({
+				status: 'success',
+				message: "No users found in the database (model's message)",
+			});
+			return [];
+		}
+
+		return users;
 	} catch (error) {
 		console.error({
 			status: 'error',
@@ -17,8 +26,27 @@ export const getUsers = async () => {
 
 export const getUserById = async (user_id) => {
 	try {
-		// dentro de try
-		// va la lógica del modelo
+		if (!user_id || isNaN(user_id)) {
+			console.error({
+				status: 'error',
+				message: "Invalid user ID (model's error)",
+			});
+			return null;
+		}
+
+		const [user] = await connection.execute(
+			'SELECT * FROM user_table WHERE user_id = ?',
+			[user_id]
+		);
+
+		if (user.length === 0) {
+			console.error({
+				status: 'error',
+				message: "The user does not exist (model's error)",
+			});
+			return null;
+		}
+		return user;
 	} catch (error) {
 		console.error({
 			status: 'error',
@@ -110,8 +138,58 @@ export const createUser = async (
 
 export const updateUser = async (user_id, userData) => {
 	try {
-		// dentro de try
-		// va la lógica del modelo
+		const { user_firstname, user_lastname, user_name,user_pass } = userData;
+
+		if (!user_id || isNaN(user_id)) {
+			console.error({
+				status: 'error',
+				message: "Invalid user ID (model's error)",
+			});
+			return null;
+		}
+
+		// Un array es para los valores a actualizar y el otro para las claves para crear la query
+		const updates = [];
+		const values = [];
+
+		if (user_firstname) {
+			updates.push('user_firstname = ?');
+			values.push(user_firstname);
+		}
+
+		if (user_lastname) {
+			updates.push('user_lastname = ?');
+			values.push(user_lastname);
+		}
+
+		if (user_name) {
+			updates.push('user_name = ?');
+			values.push(user_name);
+		}
+
+		if (user_pass) {
+			updates.push('user_pass = ?');
+			values.push(user_pass);
+		}
+
+		// Agrego la id del usuario actualizado
+		values.push(user_id);
+
+		if (updates.length === 0) {
+			console.error({
+				status: 'error',
+				message: "There are no fields to update (model's error)",
+			});
+			return null;
+		}
+
+		const query = `UPDATE user_table SET ${updates.join(
+			', '
+		)} WHERE user_id = ?`;
+
+		const [userUpdated] = await connection.execute(query, values);
+
+		return userUpdated;
 	} catch (error) {
 		console.error({
 			status: 'error',
@@ -124,8 +202,20 @@ export const updateUser = async (user_id, userData) => {
 
 export const deleteUser = async (user_id) => {
 	try {
-		// dentro de try
-		// va la lógica del modelo
+		if (!user_id || isNaN(user_id)) {
+			console.error({
+				status: 'error',
+				message: "Invalid user ID (model's error)",
+			});
+			return null;
+		}
+
+		const [userDeleted] = await connection.execute(
+			'DELETE FROM user_table WHERE user_id = ?',
+			[user_id]
+		);
+
+		return userDeleted;
 	} catch (error) {
 		console.error({
 			status: 'error',
