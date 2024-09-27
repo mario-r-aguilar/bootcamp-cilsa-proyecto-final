@@ -11,7 +11,7 @@ export const getAllTasks = async (req, res) => {
 	try {
 		const listOfTask = await getTasks();
 
-		if (tasks.length === 0) {
+		if (listOfTask.length === 0) {
 			return res.status(200).send({
 				status: 'success',
 				message: "No tasks found (controller's message)",
