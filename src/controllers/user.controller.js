@@ -23,7 +23,12 @@ export const getAllUsers = async (req, res) => {
 			});
 		}
 
-		res.status(200).send(listOfUsers);
+		// Quita información sensible de la respuesta
+		const listOfUsersWithoutPass = listOfUsers.map(
+			({ user_pass, ...user }) => user
+		);
+
+		res.status(200).send(listOfUsersWithoutPass);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -54,7 +59,42 @@ export const getOneUserById = async (req, res) => {
 				message: "The user does not exist (controller's error)",
 			});
 
-		res.status(200).send(user);
+		const { user_pass, ...userWithoutPass } = user;
+
+		res.status(200).send(userWithoutPass);
+	} catch (error) {
+		console.error(error);
+		res.status(500).send({
+			status: 'error',
+			message:
+				"Internal Server Error: It is not possible to obtain the chosen user (controller's error)",
+			error,
+		});
+	}
+};
+
+export const getOneUserByUsername = async (req, res) => {
+	try {
+		const { usernm } = req.params;
+
+		if (!usernm) {
+			return res.status(400).send({
+				status: 'error',
+				message: "Username is required (controller's error)",
+			});
+		}
+
+		const user = await getUserByUserName(usernm);
+
+		if (!user)
+			return res.status(404).send({
+				status: 'error',
+				message: "The user does not exist (controller's error)",
+			});
+
+		const { user_pass, ...userWithoutPass } = user;
+
+		res.status(200).send(userWithoutPass);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({

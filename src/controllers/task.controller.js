@@ -62,6 +62,49 @@ export const getOneTaskById = async (req, res) => {
 	}
 };
 
+export const getAllTaskByUserId = async (req, res) => {
+	try {
+		const { uid } = req.params;
+
+		if (!uid) {
+			return res.status(400).send({
+				status: 'error',
+				message: "User ID is required (controller's error)",
+			});
+		}
+
+		const listOfTask = await getTasks();
+
+		if (listOfTask.length === 0) {
+			return res.status(200).send({
+				status: 'success',
+				message: "No tasks found (controller's message)",
+				tasks: [],
+			});
+		}
+
+		const listOfTasksByUser = listOfTask.filter((task) => {
+			return task.user_id === Number(uid);
+		});
+
+		if (listOfTasksByUser.length === 0)
+			return res.status(404).send({
+				status: 'error',
+				message: "The user haven't tasks assigned (controller's error)",
+			});
+
+		res.status(200).send(listOfTasksByUser);
+	} catch (error) {
+		console.error(error);
+		res.status(500).send({
+			status: 'error',
+			message:
+				"Internal Server Error: It is not possible to obtain the user's tasks (controller's error)",
+			error,
+		});
+	}
+};
+
 export const createOneTask = async (req, res) => {
 	try {
 		const { user_id, task_title, task_description, task_status } = req.body;
@@ -81,7 +124,10 @@ export const createOneTask = async (req, res) => {
 			});
 		}
 
-		res.status(200).send(newTask);
+		res.status(200).send({
+			status: 'success',
+			message: "Task created successfully (controller's message)",
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
