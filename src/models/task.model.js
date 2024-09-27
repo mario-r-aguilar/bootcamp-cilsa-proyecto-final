@@ -45,7 +45,7 @@ export const getTaskById = async (task_id) => {
 			});
 			return null;
 		}
-		return task;
+		return task[0];
 	} catch (error) {
 		console.error({
 			status: 'error',

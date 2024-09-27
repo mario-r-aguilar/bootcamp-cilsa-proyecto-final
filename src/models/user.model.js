@@ -46,7 +46,7 @@ export const getUserById = async (user_id) => {
 			});
 			return null;
 		}
-		return user;
+		return user[0];
 	} catch (error) {
 		console.error({
 			status: 'error',
@@ -79,7 +79,7 @@ export const getUserByUserName = async (user_name) => {
 			});
 			return null;
 		}
-		return user;
+		return user[0];
 	} catch (error) {
 		console.error({
 			status: 'error',
@@ -138,7 +138,7 @@ export const createUser = async (
 
 export const updateUser = async (user_id, userData) => {
 	try {
-		const { user_firstname, user_lastname, user_name,user_pass } = userData;
+		const { user_firstname, user_lastname, user_name, user_pass } = userData;
 
 		if (!user_id || isNaN(user_id)) {
 			console.error({
@@ -168,8 +168,11 @@ export const updateUser = async (user_id, userData) => {
 		}
 
 		if (user_pass) {
+			// Hashea password
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash(user_pass, salt);
 			updates.push('user_pass = ?');
-			values.push(user_pass);
+			values.push(hashedPassword);
 		}
 
 		// Agrego la id del usuario actualizado
