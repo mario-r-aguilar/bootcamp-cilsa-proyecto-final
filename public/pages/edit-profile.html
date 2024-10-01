@@ -59,7 +59,7 @@
 								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#">Desloguearse</a>
+								<a id="logOutBtn" class="nav-link" href="#">Desloguearse</a>
 							</li>
 						</ul>
 					</div>
@@ -151,14 +151,16 @@
 								id="success-message"
 								class="d-none alert alert-success mt-3"
 							></div>
+							<p
+								class="text-center alert alert-warning text-dark p-1 font-weight-bold"
+							>
+								Al guardar los cambios serás redirigido a la página de logueo
+							</p>
 							<div class="d-flex justify-content-center">
 								<button type="submit" class="btn btn-primary">
 									Guardar Cambios
 								</button>
-								<a
-									class="btn btn-secondary ms-3"
-									role="button"
-									href="./user-profile.html"
+								<a class="btn btn-secondary ms-3" role="button" href="/profile"
 									>Volver</a
 								>
 							</div>

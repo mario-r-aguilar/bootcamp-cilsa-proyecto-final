@@ -26,6 +26,8 @@ export const getUsers = async () => {
 
 export const getUserById = async (user_id) => {
 	try {
+		user_id = parseInt(user_id);
+
 		if (!user_id || isNaN(user_id)) {
 			console.error({
 				status: 'error',
@@ -140,10 +142,12 @@ export const updateUser = async (user_id, userData) => {
 	try {
 		const { user_firstname, user_lastname, user_name, user_pass } = userData;
 
+		user_id = parseInt(user_id);
+
 		if (!user_id || isNaN(user_id)) {
 			console.error({
 				status: 'error',
-				message: "Invalid user ID (model's error)",
+				message: "Invalid user ID (model's error)2",
 			});
 			return null;
 		}
@@ -205,6 +209,8 @@ export const updateUser = async (user_id, userData) => {
 
 export const deleteUser = async (user_id) => {
 	try {
+		user_id = parseInt(user_id);
+
 		if (!user_id || isNaN(user_id)) {
 			console.error({
 				status: 'error',

@@ -252,6 +252,7 @@ export const loginUser = async (req, res) => {
 		// crea token de sesión
 		const token = jwt.sign(
 			{
+				userid: user.user_id,
 				username: user.user_name,
 				firstname: user.user_firstname,
 				lastname: user.user_lastname,
