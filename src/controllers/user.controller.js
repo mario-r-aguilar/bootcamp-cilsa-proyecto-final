@@ -50,7 +50,6 @@ export const getOneUserById = async (req, res) => {
 				message: "ID is required (controller's error)",
 			});
 		}
-
 		const user = await getUserById(uid);
 
 		if (!user)
@@ -287,6 +286,7 @@ export const loginUser = async (req, res) => {
 export const getCurrentUser = async (req, res) => {
 	try {
 		const currentUser = req.user;
+
 		res.status(200).send(currentUser);
 	} catch (error) {
 		console.error(error);

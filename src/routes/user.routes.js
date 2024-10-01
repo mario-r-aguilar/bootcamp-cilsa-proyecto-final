@@ -15,7 +15,7 @@ import {
 const userRouter = Router();
 
 userRouter.get('/', getAllUsers);
-userRouter.get('/:uid', getOneUserById);
+userRouter.get('/by/:uid', getOneUserById);
 userRouter.get('/by/:usernm', getOneUserByUsername);
 userRouter.post('/', registerOneUser);
 userRouter.put('/:uid', updateOneUser);
