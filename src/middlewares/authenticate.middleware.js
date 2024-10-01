@@ -13,14 +13,12 @@ export const authenticateToken = (req, res, next) => {
 
 	try {
 		const verified = jwt.verify(token, environment.jwt_secret);
-		req.user = verified; // Agrega los datos del usuario logueado a req
+		req.user = verified;
 		next();
 	} catch (error) {
-		return res
-			.status(403)
-			.send({
-				status: 'error',
-				message: "Unauthorized, invalid token (middleware's error)",
-			});
+		return res.status(403).send({
+			status: 'error',
+			message: "Unauthorized, invalid token (middleware's error)",
+		});
 	}
 };

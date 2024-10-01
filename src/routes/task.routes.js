@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { authenticateToken } from '../middlewares/authenticate.middleware.js';
 import {
 	getAllTasks,
 	getOneTaskById,

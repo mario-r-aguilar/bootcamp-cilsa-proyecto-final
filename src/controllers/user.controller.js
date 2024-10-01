@@ -283,6 +283,21 @@ export const loginUser = async (req, res) => {
 	}
 };
 
+export const getCurrentUser = async (req, res) => {
+	try {
+		const currentUser = req.user;
+		res.status(200).send(currentUser);
+	} catch (error) {
+		console.error(error);
+		res.status(500).send({
+			status: 'error',
+			message:
+				"Internal Server Error: Cannot get current user (controller's error)",
+			error,
+		});
+	}
+};
+
 export const logoutUser = async (req, res) => {
 	try {
 		res.clearCookie('token', {
