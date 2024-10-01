@@ -242,6 +242,7 @@ export const loginUser = async (req, res) => {
 
 		// compara password
 		const passwordIsMatch = await bcrypt.compare(user_pass, user.user_pass);
+
 		if (!passwordIsMatch) {
 			return res.status(401).send({
 				status: 'error',

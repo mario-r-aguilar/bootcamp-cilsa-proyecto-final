@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import environment from '../config/env.config.js';
 
 export const authenticateToken = (req, res, next) => {
-	const token = req.header('Authorization')?.split(' ')[1];
+	const token = req.cookies.token;
 
 	if (!token) {
 		return res.status(401).send({
