@@ -493,7 +493,6 @@ ya que no hay vinculación directa entre las dos secciones.
 - **Javascript**: Se emplea para realizar las validaciones de los formularios y para lograr dinamismo en la web.
 - **Datatables v1.13.5**: Se utiliza para mostrar el listado de tareas y agregar controles interactivos a la tabla.
 - **jQuery v3.6.0**: Se usa como complemento necesario de Datatables.
-- **Bootstrap v4.5.2**: Se usa como complemento necesario de Datatables.
 
 Las tecnologías como _Bootstrap, Datatables y JQuery_ se incorporan en el HTML mediante el uso de sus CDN. Para mayor información sobre ellas consulte la documentación oficial en sus páginas web.
 
