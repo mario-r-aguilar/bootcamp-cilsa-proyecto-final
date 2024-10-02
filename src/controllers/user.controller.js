@@ -269,10 +269,7 @@ export const loginUser = async (req, res) => {
 			maxAge: 3600000, // Expira en 1 hora
 		});
 
-		res.status(200).send({
-			status: 'success',
-			message: "Login successful (controller's message)",
-		});
+		res.status(200).redirect('/profile');
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
@@ -310,7 +307,7 @@ export const logoutUser = async (req, res) => {
 
 		res.status(200).send({
 			status: 'success',
-			message: "Successfully logged out (controller's message)",
+			message: "Successfully logged out (client's message)",
 		});
 	} catch (error) {
 		console.error(error);
