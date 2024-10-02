@@ -524,15 +524,15 @@ Se utilizaron los colores incluídos en Bootstrap y se combinaron de manera que 
 
 - Navbar y Footer
 
-  | Fondo   | Texto |
-  | ------- | ----- |
-  | #212529 | #fff  |
+  | Fondo     | Texto  |
+  | --------- | ------ |
+  | `#212529` | `#fff` |
 
 - Hover Navbar Links
 
-| Fondo   | Texto |
-| ------- | ----- |
-| #6d6d6d | #fff  |
+| Fondo     | Texto  |
+| --------- | ------ |
+| `#6d6d6d` | `#fff` |
 
 - Focus Navbar Texto Links
   `#fffb00`
