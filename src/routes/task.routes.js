@@ -11,11 +11,11 @@ import {
 
 const taskRouter = Router();
 
-taskRouter.get('/', getAllTasks);
-taskRouter.get('/:id', getOneTaskById);
-taskRouter.get('/by/:uid', getAllTaskByUserId);
-taskRouter.post('/', createOneTask);
-taskRouter.put('/:id', updateOneTask);
-taskRouter.delete('/:id', deleteOneTask);
+taskRouter.get('/', authenticateToken, getAllTasks);
+taskRouter.get('/:id', authenticateToken, getOneTaskById);
+taskRouter.get('/by/:uid', authenticateToken, getAllTaskByUserId);
+taskRouter.post('/', authenticateToken, createOneTask);
+taskRouter.put('/:id', authenticateToken, updateOneTask);
+taskRouter.delete('/:id', authenticateToken, deleteOneTask);
 
 export default taskRouter;

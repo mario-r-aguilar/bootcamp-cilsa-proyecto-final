@@ -106,6 +106,52 @@ SECURE_COOKIE=false
 
 El motor de base de datos utilizado es **MySQL** y se emplea la librería **mysql2** para realizar las consultas desde los modelos del servidor.
 
+**Creación**
+
+Para crear la Base de Datos accede a **MySQL Workbench 8.0 CE**, genera la siguiente query y ejecutala.
+
+```
+CREATE DATABASE database-name;
+USE database-name;
+
+CREATE TABLE user_table (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(100) NOT NULL UNIQUE,
+    user_pass VARCHAR(255) NOT NULL,
+    user_firstname VARCHAR(100) NOT NULL,
+    user_lastname VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE task_table (
+    task_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    task_title VARCHAR(255) NOT NULL,
+    task_description VARCHAR(255) NOT NULL,
+    task_date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    task_date_modify DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    task_status VARCHAR(50) NOT NULL,
+    CHECK (task_status IN ('pending', 'in progress', 'blocked', 'finished')),
+    FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+);
+```
+
+**Conexión**
+
+Crear un archivo para realizar la conexión a la base de datos. Cabe aclarar que los valores utilizados en este ejemplo son ficticios. De todas formas se sugiere el uso de variables de entorno en lugar de valores fijos. Luego de configurar la conexión podemos usarla en los archivos de los modelos.
+
+```
+import mysql from 'mysql2/promise';
+
+const connection = await mysql.createConnection({
+	host: localhost,
+	user: admin,
+	password: admin-pass,
+	database: database-name,
+});
+
+export default connection;
+```
+
 **Entidades, Atributos y Modelo de Datos**
 
 La base de datos posee dos entidades, a continuación los detalles de cada una.
@@ -149,10 +195,10 @@ Las relaciones que existen entre **user_table y task_table** son: Un usuario pue
 | GET    | `/api/user`            | Obtiene el listado total de usuarios              | JWT           |
 | GET    | `/api/user/via/:uid`   | Obtiene un usuario por su ID                      | JWT           |
 | GET    | `/api/user/by/:usernm` | Obtiene un usuario por su username                | JWT           |
-| POST   | `/api/user`            | Crea un usuario en la base de datos               | JWT           |
+| POST   | `/api/user`            | Crea un usuario en la base de datos               | -             |
 | PUT    | `/api/user/:uid`       | Actualiza los datos almacenados de un usuario     | JWT           |
 | DELETE | `/api/user/:uid`       | Elimina un usuario de la base de datos            | JWT           |
-| POST   | `/api/user/login`      | Loguea a un usuario                               | JWT           |
+| POST   | `/api/user/login`      | Loguea a un usuario                               | -             |
 | POST   | `/api/user/logout`     | Desloguea a un usuario                            | JWT           |
 | GET    | `/api/user/current`    | Obtiene los datos del usuario logueado            | JWT           |
 | GET    | `/api/task`            | Obtiene el listado total de tareas                | JWT           |

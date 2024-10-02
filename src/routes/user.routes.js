@@ -14,14 +14,14 @@ import {
 
 const userRouter = Router();
 
-userRouter.get('/', getAllUsers);
-userRouter.get('/via/:uid', getOneUserById);
-userRouter.get('/by/:usernm', getOneUserByUsername);
+userRouter.get('/', authenticateToken, getAllUsers);
+userRouter.get('/via/:uid', authenticateToken, getOneUserById);
+userRouter.get('/by/:usernm', authenticateToken, getOneUserByUsername);
 userRouter.post('/', registerOneUser);
-userRouter.put('/:uid', updateOneUser);
-userRouter.delete('/:uid', deleteOneUser);
+userRouter.put('/:uid', authenticateToken, updateOneUser);
+userRouter.delete('/:uid', authenticateToken, deleteOneUser);
 userRouter.post('/login', loginUser);
-userRouter.post('/logout', logoutUser);
+userRouter.post('/logout', authenticateToken, logoutUser);
 userRouter.get('/current', authenticateToken, getCurrentUser);
 
 export default userRouter;

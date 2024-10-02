@@ -124,10 +124,7 @@ export const registerOneUser = async (req, res) => {
 			});
 		}
 
-		res.status(200).send({
-			status: 'success',
-			message: "User created successfully (controller's message)",
-		});
+		res.status(200).redirect('/login');
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({
