@@ -74,12 +74,14 @@ SECURE_COOKIE: modo de envío de la cookie donde se almacena el token (true para
 
 _Ejemplo de archivo .env en entorno de desarrollo_
 
-`HOST=localhost`
-`USER=admin`
-`PASSWORD=adminpass`
-`DATABASE=eccomerce`
-`JWT_SECRET=secret`
-`SECURE_COOKIE=false`
+```
+HOST=localhost
+USER=admin
+PASSWORD=adminpass
+DATABASE=eccomerce
+JWT_SECRET=secret
+SECURE_COOKIE=false
+```
 
 [Ir al Indice](#Indice)
 
@@ -456,11 +458,11 @@ Los archivos estáticos del frontend se encuentran dentro del servidor en la car
 
 **Descripción de la estructura**
 
-- /css: Contiene el archivo CSS personalizado para agregar estilos o modificar los predeterminados de Bootstrap.
-- /img: Contiene imágenes utilizadas en el sitio.
-- /js: Contiene los archivos JavaScript para manejar la lógica y las interacciones de las páginas.
-- /pages: Contiene el resto de páginas que componen el sitio.
-- index.html: Archivo principal de acceso al sitio.
+- **/css:** Contiene el archivo CSS personalizado para agregar estilos o modificar los predeterminados de Bootstrap.
+- **/img:** Contiene imágenes utilizadas en el sitio.
+- **/js:** Contiene los archivos JavaScript para manejar la lógica y las interacciones de las páginas.
+- **/pages:** Contiene el resto de páginas que componen el sitio.
+- **index.html:** Archivo principal de acceso al sitio.
 
 [Ir al Indice](#Indice)
 
@@ -504,29 +506,39 @@ Se utilizaron los colores incluídos en Bootstrap y se combinaron de manera que 
 **Colores primarios**
 
 - Color de Fondo Principal
-  #fff
+  `#fff`
 
 - Color de Texto Principal
-  #000
+  `#000`
 
 - Color de los Botones
-  Fondo: #0d6efd Texto: #f8f9fa
-  Fondo: #198754 Texto: #f8f9fa
-  Fondo: #6c757d Texto: #f8f9fa
-  Fondo: #dc3545 Texto: #f8f9fa
+
+  | Fondo     | Texto     |
+  | --------- | --------- |
+  | `#0d6efd` | `#f8f9fa` |
+  | `#198754` | `#f8f9fa` |
+  | `#6c757d` | `#f8f9fa` |
+  | `#dc3545` | `#f8f9fa` |
 
 **Colores secundarios**
 
 - Navbar y Footer
-  Fondo: #212529 Texto: #fff
+
+  | Fondo   | Texto |
+  | ------- | ----- |
+  | #212529 | #fff  |
+
 - Hover Navbar Links
-  Fondo: #6d6d6d Texto: #fff
 
-- Focus Navbar Links
-  Texto: #fffb00
+| Fondo   | Texto |
+| ------- | ----- |
+| #6d6d6d | #fff  |
 
-- Hover Footer
-  Border bottom: #1868aa
+- Focus Navbar Texto Links
+  `#fffb00`
+
+- Hover Border bottom Footer
+  `#1868aa`
 
 [Ir al Indice](#Indice)
 
