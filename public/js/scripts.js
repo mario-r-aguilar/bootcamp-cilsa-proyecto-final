@@ -143,7 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
 					}),
 				})
 					.then(() => {
-						window.location.href = '/login';
+						console.info({
+							status: 'success',
+							message: "User created successfully (client's message)",
+						});
 					})
 					.catch(() => {
 						console.error({
@@ -398,17 +401,15 @@ document.addEventListener('DOMContentLoaded', () => {
 			data.forEach((task) => {
 				const row = document.createElement('tr');
 				row.innerHTML = `
-			<td>${task.task_id}</td> <!-- ID de la tarea -->
-			<td>${task.user_id}</td> <!-- ID de usuario -->
+			<td>${task.task_id}</td> <!-- ID de la tarea -->			
 			<td>${task.task_title}</td> <!-- Título de la tarea -->
 			<td>${task.task_description}</td> <!-- Estado de la tarea -->
-			<td>${task.task_status}</td> <!-- Estado de la tarea -->
-			<td>${task.task_date_modify}}</td> <!-- Última modificación -->
+			<td>${task.task_status}</td> <!-- Estado de la tarea -->			
 			<td>
-				<button data-id="${task.task_id}" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#confirmUpdateTask">
+				<button data-id="${task.task_id}" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#confirmUpdateTask" >
 					Editar
 				</button>
-				<button type="button" data-id="${task.task_id}" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteTask">
+				<button type="button" data-id="${task.task_id}" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteTask" >
 					Eliminar
 				</button>
 			</td>
