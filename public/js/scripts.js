@@ -1,6 +1,73 @@
-// función para obtener el Id del usuario
 document.addEventListener('DOMContentLoaded', () => {
 	let userId;
+	let taskId;
+
+	// Muestra el listado de tareas del usuario
+	const DisplayTasks = (userId) => {
+		fetch(`/api/task/by/${userId}`)
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.length === 0) {
+					console.error({
+						status: 'error',
+						message: "No tasks found (client's error)",
+					});
+					return null;
+				}
+
+				const tasksTableBody = document.querySelector('#taskTable');
+				tasksTableBody.innerHTML = '';
+
+				data.forEach((task) => {
+					switch (task.task_status) {
+						case 'pending':
+							task.task_status = 'Pendiente';
+							break;
+						case 'in progress':
+							task.task_status = 'En curso';
+							break;
+						case 'blocked':
+							task.task_status = 'Bloqueada';
+							break;
+						case 'finished':
+							task.task_status = 'Finalizada';
+							break;
+						default:
+							console.error({
+								status: 'error',
+								message: "Non-existent status (client's error)",
+								error,
+							});
+							break;
+					}
+					const row = document.createElement('tr');
+					row.innerHTML = `
+						
+				<td>${task.task_title}</td> <!-- Título de la tarea -->
+				<td>${task.task_description}</td> <!-- Estado de la tarea -->
+				<td>${task.task_status}</td> <!-- Estado de la tarea -->			
+				<td>
+					<button data-id="${task.task_id}" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#confirmUpdateTask" >
+						Editar
+					</button>
+					<button type="button" data-id="${task.task_id}" class="btn btn-danger btn-sm del-btn" data-bs-toggle="modal" data-bs-target="#deleteTask" >
+						Eliminar
+					</button>
+				</td>
+			`;
+					tasksTableBody.appendChild(row);
+				});
+			})
+			.catch((error) => {
+				console.error({
+					status: 'error',
+					message: "It is not possible to fetch tasks (client's error)",
+					error,
+				});
+			});
+	};
+
+	// Obtiene la ID del usuario logueado
 	const getUserId = async () => {
 		try {
 			const response = await fetch('/api/user/current', {
@@ -13,23 +80,40 @@ document.addEventListener('DOMContentLoaded', () => {
 			const data = await response.json();
 			userId = data.userid;
 
-			// Llama a DisplayTasks solo si estamos en la página correcta
+			// Llama a la función DisplayTasks solo en user-profile.html
 			if (document.getElementById('taskDataTable')) {
 				DisplayTasks(userId);
+
+				// Obtiene la ID de la tarea
+				document.addEventListener('click', function (event) {
+					// Verificar si se hizo clic en un botón de editar
+					if (event.target.classList.contains('edit-btn')) {
+						taskId = event.target.getAttribute('data-id');
+
+						loadTaskValue(taskId);
+					}
+
+					// Verificar si se hizo clic en un botón de eliminar
+					if (event.target.classList.contains('del-btn')) {
+						taskId = event.target.getAttribute('data-id');
+					}
+				});
 			}
 		} catch (error) {
 			console.error({
 				status: 'error',
 				message: "It is not possible to obtain the user id (client's error)",
+				error,
 			});
 		}
 	};
 
-	// ejecuta función para obtener id
 	const addNewTaskForm = document.getElementById('addNewTaskForm');
 	const editTaskForm = document.getElementById('editTaskForm');
 	const editProfileForm = document.getElementById('editProfile');
 	const taskDataTable = document.getElementById('taskDataTable');
+
+	// ejecuta función para obtener la ID del usuario
 	if (addNewTaskForm || editTaskForm || editProfileForm || taskDataTable) {
 		getUserId();
 	}
@@ -45,10 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			.then(() => {
 				window.location.href = url;
 			})
-			.catch(() => {
+			.catch((error) => {
 				console.error({
 					status: 'error',
 					message: "It is not possible log out (client's error)",
+					error,
 				});
 			});
 	};
@@ -59,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// función para cargar los datos del usuario en el formulario de editar perfil
+	// función para obtener los datos del usuario en editar perfil
 	const loadProfileValue = () => {
 		const userFirstName = document.getElementById('user_firstname_update');
 		const userLastName = document.getElementById('user_lastname_update');
@@ -81,10 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				username.value = data.username;
 				userpass.value = '********';
 			})
-			.catch(() => {
+			.catch((error) => {
 				console.error({
 					status: 'error',
 					message: "It is not possible obtain the user data (client's error)",
+					error,
 				});
 			});
 	};
@@ -92,9 +178,42 @@ document.addEventListener('DOMContentLoaded', () => {
 		loadProfileValue();
 	}
 
+	// función para obtener los datos de la tarea antes de editarla
+	const loadTaskValue = (task_id) => {
+		const task_title_update = document.getElementById('task_title_update');
+		const task_description_update = document.getElementById(
+			'task_description_update'
+		);
+		const task_status_update = document.getElementById('task_status_update');
+
+		fetch(`/api/task/${task_id}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => {
+				return response.json();
+			})
+			.then((data) => {
+				task_title_update.value = data.task_title;
+				task_description_update.value = data.task_description;
+				task_status_update.value = data.task_status;
+			})
+			.catch((error) => {
+				console.error({
+					status: 'error',
+					message:
+						"It is not possible to obtain the task data (client's error)",
+					error,
+				});
+			});
+	};
+
 	// función para el envío de formularios
 	const sendForm = (formAction) => {
 		switch (formAction) {
+			// login
 			case '/api/user/login':
 				const user_name = document.getElementById('user_name').value;
 				const user_pass = document.getElementById('user_pass').value;
@@ -115,15 +234,16 @@ document.addEventListener('DOMContentLoaded', () => {
 							message: "Login successful (client's message)",
 						});
 					})
-					.catch(() => {
+					.catch((error) => {
 						console.error({
 							status: 'error',
 							message: "It is not possible log in (client's error)",
+							error,
 						});
 					});
-
 				break;
 
+			// registrar usuario
 			case '/api/user':
 				const user_firstname = document.getElementById('user_firstname').value;
 				const user_lastname = document.getElementById('user_lastname').value;
@@ -148,14 +268,16 @@ document.addEventListener('DOMContentLoaded', () => {
 							message: "User created successfully (client's message)",
 						});
 					})
-					.catch(() => {
+					.catch((error) => {
 						console.error({
 							status: 'error',
 							message: "It is not possible register (client's error)",
+							error,
 						});
 					});
 				break;
 
+			// actualizar usuario
 			case '/api/user/:uid':
 				const userFirstName = document.getElementById(
 					'user_firstname_update'
@@ -184,14 +306,16 @@ document.addEventListener('DOMContentLoaded', () => {
 					.then(() => {
 						userLogOut('/login');
 					})
-					.catch(() => {
+					.catch((error) => {
 						console.error({
 							status: 'error',
 							message: "It is not possible update user (client's error)",
+							error,
 						});
 					});
 				break;
 
+			// crear tarea
 			case '/api/task':
 				const task_title_add = document.getElementById('task_title_add').value;
 				const task_description_add = document.getElementById(
@@ -204,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						user_id: `${userId}`,
+						user_id: userId,
 						task_title: task_title_add,
 						task_description: task_description_add,
 						task_status: 'pending',
@@ -213,16 +337,16 @@ document.addEventListener('DOMContentLoaded', () => {
 					.then(() => {
 						window.location.href = '/profile';
 					})
-					.catch(() => {
+					.catch((error) => {
 						console.error({
 							status: 'error',
-							message: "It is not possible add task (client's error)",
+							message: "It is not possible create task (client's error)",
+							error,
 						});
 					});
-
 				break;
 
-			// ## FALTA OBTENER LA ID DE LA TAREA
+			// actualizar tarea
 			case '/api/task/:id':
 				const task_title_update =
 					document.getElementById('task_title_update').value;
@@ -232,49 +356,41 @@ document.addEventListener('DOMContentLoaded', () => {
 				const task_status_update =
 					document.getElementById('task_status_update').value;
 
-				if (
-					task_title_update != '' ||
-					task_description_update != '' ||
-					task_status_update != ''
-				) {
-					fetch(`/api/task/${taskId}`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							user_id: `${userId}`,
-							task_title: task_title_update,
-							task_description: task_description_update,
-							task_status: task_status_update,
-						}),
+				fetch(`/api/task/${taskId}`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						user_id: userId,
+						task_title: task_title_update,
+						task_description: task_description_update,
+						task_status: task_status_update,
+					}),
+				})
+					.then(() => {
+						window.location.href = '/profile';
 					})
-						.then(() => {
-							window.location.href = '/profile';
-						})
-						.catch(() => {
-							console.error({
-								status: 'error',
-								message: "It is not possible edit task (client's error)",
-							});
+					.catch((error) => {
+						console.error({
+							status: 'error',
+							message: "It is not possible update task (client's error)",
+							error,
 						});
-				}
+					});
 				break;
 
 			default:
 				console.error({
 					status: 'error',
-					message:
-						"It is not possible send the form, form's action not valid (client's error)",
+					message: 'It is not possible to determine the form action',
 				});
 				break;
 		}
 	};
 
-	// función del botón para eliminar una tarea
-	// ## FALTA OBTENER LA ID DE LA TAREA
-	const deleteTask = (taskId) => {
-		fetch(`/api/task/${taskId}`, {
+	const deleteTask = (task_id) => {
+		fetch(`/api/task/${task_id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
@@ -283,182 +399,39 @@ document.addEventListener('DOMContentLoaded', () => {
 			.then(() => {
 				window.location.href = '/profile';
 			})
-			.catch(() => {
+			.catch((error) => {
 				console.error({
 					status: 'error',
 					message: "It is not possible delete the task (client's error)",
+					error,
 				});
 			});
 	};
 	const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 	if (confirmDeleteBtn) {
 		confirmDeleteBtn.addEventListener('click', () => {
-			deleteTask();
+			deleteTask(taskId);
 		});
 	}
 
-	// función para el envío de confirmación del formulario
-	const sendMessage = () => {
-		const successMessage = document.getElementById('success-message');
-		const successMessageUpdateTask = document.getElementById(
-			'success-message-update-task'
-		);
-
-		if (successMessage) {
-			successMessage.classList.remove('d-none');
-			successMessage.innerHTML = 'Operación Completada Satisfactoriamente';
-			setTimeout(function () {
-				successMessage.classList.add('d-none');
-				successMessage.innerHTML = '';
-			}, 2000);
-		}
-
-		if (successMessageUpdateTask) {
-			successMessageUpdateTask.classList.remove('d-none');
-			successMessageUpdateTask.innerHTML =
-				'Operación Completada Satisfactoriamente';
-			setTimeout(function () {
-				successMessageUpdateTask.classList.add('d-none');
-				successMessageUpdateTask.innerHTML = '';
-				form.reset();
-			}, 2000);
-		}
-	};
-
-	// función para validar formularios
-	const formValidations = () => {
-		document.addEventListener('DOMContentLoaded', function () {
-			const forms = document.querySelectorAll('form');
-
-			forms.forEach((form) => {
-				form.addEventListener('submit', function (event) {
-					event.preventDefault();
-
-					const inputs = form.querySelectorAll(
-						'input[type="text"], input[type="password"]'
-					);
-					let isValid = true;
-					let formAction = form.getAttribute('action');
-
-					inputs.forEach((input) => {
-						const value = input.value.trim();
-						const feedback = input.nextElementSibling;
-
-						if (value === '') {
-							feedback.textContent = 'El campo no puede estar vacío.';
-							feedback.classList.remove('valid-feedback');
-							feedback.classList.add('invalid-feedback');
-							input.classList.add('is-invalid');
-							isValid = false;
-						} else if (input.type === 'text' && /\d/.test(value)) {
-							feedback.textContent = 'El campo no puede contener números.';
-							feedback.classList.remove('valid-feedback');
-							feedback.classList.add('invalid-feedback');
-							input.classList.add('is-invalid');
-							isValid = false;
-						} else {
-							feedback.textContent = 'Válido.';
-							feedback.classList.remove('invalid-feedback');
-							feedback.classList.add('valid-feedback');
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-						}
-					});
-
-					if (isValid) {
-						sendForm(formAction);
-						sendMessage();
-						form.reset();
-					}
-				});
-			});
+	if (addNewTaskForm) {
+		addNewTaskForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			sendForm('/api/task');
 		});
-	};
-	formValidations();
+	}
 
-	// Administración de DataTable
+	if (editTaskForm) {
+		editTaskForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			sendForm('/api/task/:id');
+		});
+	}
 
-	const DisplayTasks = async (user_id) => {
-		try {
-			const response = await fetch(`/api/task/by/${user_id}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-			const data = await response.json();
-
-			if (data.length === 0) {
-				console.error({
-					status: 'error',
-					message: "No tasks found (client's error)",
-				});
-				return null;
-			}
-
-			const tasksTableBody = document.querySelector('#taskTable');
-			tasksTableBody.innerHTML = '';
-			data.forEach((task) => {
-				const row = document.createElement('tr');
-				row.innerHTML = `
-			<td>${task.task_id}</td> <!-- ID de la tarea -->			
-			<td>${task.task_title}</td> <!-- Título de la tarea -->
-			<td>${task.task_description}</td> <!-- Estado de la tarea -->
-			<td>${task.task_status}</td> <!-- Estado de la tarea -->			
-			<td>
-				<button data-id="${task.task_id}" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#confirmUpdateTask" >
-					Editar
-				</button>
-				<button type="button" data-id="${task.task_id}" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteTask" >
-					Eliminar
-				</button>
-			</td>
-		`;
-				tasksTableBody.appendChild(row);
-			});
-		} catch (error) {
-			console.error({
-				status: 'error',
-				message: "Error fetching tasks (client's error)",
-				error,
-			});
-		}
-	};
-
-	if (taskDataTable) {
-		const dataTableOptions = {
-			columnDefs: [
-				{ className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
-				{ orderable: false, targets: [5] },
-			],
-			language: {
-				decimal: '',
-				emptyTable: 'No hay datos disponibles en la tabla',
-				info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
-				infoEmpty: 'Mostrando 0 a 0 de 0 registros',
-				infoFiltered: '(filtrado de _MAX_ registros totales)',
-				infoPostFix: '',
-				thousands: ',',
-				lengthMenu: 'Mostrar _MENU_ registros',
-				loadingRecords: 'Cargando...',
-				processing: 'Procesando...',
-				search: 'Buscar:',
-				zeroRecords: 'No se encontraron registros coincidentes',
-				paginate: {
-					first: 'Primero',
-					last: 'Último',
-					next: 'Siguiente',
-					previous: 'Anterior',
-				},
-				aria: {
-					sortAscending: ': activar para ordenar la columna ascendente',
-					sortDescending: ': activar para ordenar la columna descendente',
-				},
-			},
-		};
-
-		$(document).ready(function () {
-			$('#taskTableDetail').DataTable(dataTableOptions);
+	if (editProfileForm) {
+		editProfileForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			sendForm('/api/user/:uid');
 		});
 	}
 });
