@@ -2,6 +2,39 @@ document.addEventListener('DOMContentLoaded', () => {
 	let userId;
 	let taskId;
 
+	const greeting = async () => {
+		try {
+			const response = await fetch('/api/user/current', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			const data = await response.json();
+			const loggedUser = data.firstname;
+
+			const greetingToUser = document.getElementById('greetingToUser');
+			greetingToUser.innerHTML = '';
+			const messageToUser = document.createElement('h1');
+			messageToUser.innerHTML = `
+		Hola ${loggedUser}!
+		`;
+			greetingToUser.appendChild(messageToUser);
+			greetingToUser.classList.add('mb-5');
+			greetingToUser.classList.add('text-center');
+		} catch (error) {
+			console.error({
+				status: 'error',
+				message: "It is not possible to get user's firstname  (client's error)",
+				error,
+			});
+		}
+	};
+	if (greetingToUser) {
+		greeting();
+	}
+
 	// Muestra el listado de tareas del usuario
 	const DisplayTasks = (userId) => {
 		fetch(`/api/task/by/${userId}`)
