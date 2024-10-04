@@ -69,6 +69,14 @@
 			<div class="container mb-5 pb-5">
 				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
 				<h1 class="text-center mb-5">Logueo de Usuario</h1>
+
+				<div class="mb-2 sticky-top">
+					<span
+						id="failureMessage"
+						class="d-none alert alert-danger my-2"
+					></span>
+				</div>
+
 				<div class="row d-flex justify-content-center mt-3">
 					<form
 						id="loginForm"
@@ -76,10 +84,6 @@
 						action="/api/user/login"
 						method="post"
 					>
-						<div
-							id="success-message"
-							class="d-none alert alert-success mt-3"
-						></div>
 						<div class="container p-2 m-3 mb-5">
 							<div class="mb-5 mt-2">
 								<label for="user_name" class="form-label">Usuario:</label>
@@ -107,6 +111,14 @@
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
+
+							<p
+								class="text-center alert alert-warning text-dark p-1 fs-6 shadow border border-warning"
+							>
+								Si tu logueo es exitoso, serás redirigido a la página de tu
+								perfil
+							</p>
+
 							<div
 								style="
 									text-align: center;

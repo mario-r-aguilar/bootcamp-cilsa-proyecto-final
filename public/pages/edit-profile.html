@@ -71,6 +71,14 @@
 			<div class="container">
 				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
 				<h1 class="text-center mb-4">Editar Perfil</h1>
+
+				<div class="mb-2 sticky-top">
+					<span
+						id="failureMessage"
+						class="d-none alert alert-danger my-2"
+					></span>
+				</div>
+
 				<div class="row d-flex justify-content-center mt-3">
 					<form
 						id="editProfile"
@@ -146,12 +154,9 @@
 									El campo no puede estar vacío.
 								</div>
 							</div>
-							<div
-								id="success-message"
-								class="d-none alert alert-success mt-3"
-							></div>
+
 							<p
-								class="text-center alert alert-warning text-dark p-1 font-weight-bold"
+								class="text-center alert alert-warning text-dark p-1 fs-6 shadow border border-warning"
 							>
 								Al guardar los cambios serás redirigido a la página de logueo
 							</p>

@@ -210,6 +210,60 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 	};
 
+	// funciones para mostrar mensaje de envío exitoso
+	const saveSuccessMessage = () => {
+		localStorage.setItem(
+			'successMessage',
+			'Operación Completada Satisfactoriamente'
+		);
+	};
+	const sendSuccessMessage = (message) => {
+		const successMessage = document.getElementById('successMessage');
+		successMessage.classList.remove('d-none');
+		successMessage.innerHTML = `${message}`;
+		setTimeout(function () {
+			successMessage.classList.add('d-none');
+			successMessage.innerHTML = '';
+		}, 2300);
+	};
+	const getSuccessMessage = localStorage.getItem('successMessage');
+	if (getSuccessMessage) {
+		sendSuccessMessage(getSuccessMessage);
+		localStorage.removeItem('successMessage');
+	} else {
+		console.error({
+			status: 'error',
+			message: "It is not possible show success message (client's error)",
+		});
+	}
+
+	// función para mostrar mensaje de envío erróneo
+	const saveFailureMessage = () => {
+		localStorage.setItem(
+			'failureMessage',
+			'La operación no se pudo completar. Contacte con su administrador'
+		);
+	};
+	const sendFailureMessage = (message) => {
+		const failureMessage = document.getElementById('failureMessage');
+		failureMessage.classList.remove('d-none');
+		failureMessage.innerHTML = `${message}`;
+		setTimeout(function () {
+			failureMessage.classList.add('d-none');
+			failureMessage.innerHTML = '';
+		}, 2300);
+	};
+	const getFailureMessage = localStorage.getItem('failureMessage');
+	if (getFailureMessage) {
+		sendFailureMessage(getFailureMessage);
+		localStorage.removeItem('failureMessage');
+	} else {
+		console.error({
+			status: 'error',
+			message: "It is not possible show success message (client's error)",
+		});
+	}
+
 	// función para el envío de formularios
 	const sendForm = (formAction) => {
 		switch (formAction) {
@@ -229,12 +283,18 @@ document.addEventListener('DOMContentLoaded', () => {
 					}),
 				})
 					.then(() => {
-						console.info({
-							status: 'success',
-							message: "Login successful (client's message)",
-						});
+						if (response.ok) {
+							console.log({
+								status: 'success',
+								message: "Login successful (client's message)",
+							});
+						} else {
+							saveFailureMessage();
+							window.location.href = '/login';
+						}
 					})
 					.catch((error) => {
+						saveFailureMessage();
 						console.error({
 							status: 'error',
 							message: "It is not possible log in (client's error)",
@@ -262,13 +322,19 @@ document.addEventListener('DOMContentLoaded', () => {
 						user_pass: userPass,
 					}),
 				})
-					.then(() => {
-						console.info({
-							status: 'success',
-							message: "User created successfully (client's message)",
-						});
+					.then((response) => {
+						if (response.ok) {
+							console.log({
+								status: 'success',
+								message: "User created successfully (client's message)",
+							});
+						} else {
+							saveFailureMessage();
+							window.location.href = '/register';
+						}
 					})
 					.catch((error) => {
+						saveFailureMessage();
 						console.error({
 							status: 'error',
 							message: "It is not possible register (client's error)",
@@ -303,10 +369,16 @@ document.addEventListener('DOMContentLoaded', () => {
 						user_pass: userpass,
 					}),
 				})
-					.then(() => {
-						userLogOut('/login');
+					.then((response) => {
+						if (response.ok) {
+							userLogOut('/login');
+						} else {
+							saveFailureMessage();
+							window.location.href = '/editprofile';
+						}
 					})
 					.catch((error) => {
+						saveFailureMessage();
 						console.error({
 							status: 'error',
 							message: "It is not possible update user (client's error)",
@@ -334,10 +406,16 @@ document.addEventListener('DOMContentLoaded', () => {
 						task_status: 'pending',
 					}),
 				})
-					.then(() => {
-						window.location.href = '/profile';
+					.then((response) => {
+						if (response.ok) {
+							saveSuccessMessage();
+							window.location.href = '/profile';
+						} else {
+							saveFailureMessage();
+						}
 					})
 					.catch((error) => {
+						saveFailureMessage();
 						console.error({
 							status: 'error',
 							message: "It is not possible create task (client's error)",
@@ -368,10 +446,16 @@ document.addEventListener('DOMContentLoaded', () => {
 						task_status: task_status_update,
 					}),
 				})
-					.then(() => {
-						window.location.href = '/profile';
+					.then((response) => {
+						if (response.ok) {
+							saveSuccessMessage();
+							window.location.href = '/profile';
+						} else {
+							saveFailureMessage();
+						}
 					})
 					.catch((error) => {
+						saveFailureMessage();
 						console.error({
 							status: 'error',
 							message: "It is not possible update task (client's error)",
@@ -389,6 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
+	// función para eliminar tareas
 	const deleteTask = (task_id) => {
 		fetch(`/api/task/${task_id}`, {
 			method: 'DELETE',
@@ -396,10 +481,16 @@ document.addEventListener('DOMContentLoaded', () => {
 				'Content-Type': 'application/json',
 			},
 		})
-			.then(() => {
-				window.location.href = '/profile';
+			.then((response) => {
+				if (response.ok) {
+					saveSuccessMessage();
+					window.location.href = '/profile';
+				} else {
+					saveFailureMessage();
+				}
 			})
 			.catch((error) => {
+				saveFailureMessage();
 				console.error({
 					status: 'error',
 					message: "It is not possible delete the task (client's error)",
