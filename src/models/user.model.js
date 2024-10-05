@@ -70,7 +70,7 @@ export const getUserByUserName = async (user_name) => {
 		}
 
 		const [user] = await connection.execute(
-			'SELECT * FROM user_table WHERE user_name = ?',
+			'SELECT * FROM user_table WHERE BINARY user_name = ?',
 			[user_name]
 		);
 
