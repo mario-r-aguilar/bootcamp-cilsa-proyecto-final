@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	let userId;
 	let taskId;
 
+	// función para saludar al usuario logueado
+	const greetingToUser = document.getElementById('greetingToUser');
 	const greeting = async () => {
 		try {
 			const response = await fetch('/api/user/current', {
@@ -14,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			const data = await response.json();
 			const loggedUser = data.firstname;
 
-			const greetingToUser = document.getElementById('greetingToUser');
 			greetingToUser.innerHTML = '';
 			const messageToUser = document.createElement('h1');
 			messageToUser.innerHTML = `
@@ -145,6 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const editTaskForm = document.getElementById('editTaskForm');
 	const editProfileForm = document.getElementById('editProfile');
 	const taskDataTable = document.getElementById('taskDataTable');
+	const loginForm = document.getElementById('loginForm');
+	const registerForm = document.getElementById('registerForm');
 
 	// ejecuta función para obtener la ID del usuario
 	if (addNewTaskForm || editTaskForm || editProfileForm || taskDataTable) {
@@ -197,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				userFirstName.value = data.firstname;
 				userLastName.value = data.lastname;
 				username.value = data.username;
-				userpass.value = '********';
+				userpass.value = 'Pas$w0rd';
 			})
 			.catch((error) => {
 				console.error({
@@ -264,9 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		sendSuccessMessage(getSuccessMessage);
 		localStorage.removeItem('successMessage');
 	} else {
-		console.error({
-			status: 'error',
-			message: "It is not possible show success message (client's error)",
+		console.log({
+			status: 'warning',
+			message:
+				"There isn't form submission confirmation message (client's error)",
 		});
 	}
 
@@ -291,91 +295,77 @@ document.addEventListener('DOMContentLoaded', () => {
 		sendFailureMessage(getFailureMessage);
 		localStorage.removeItem('failureMessage');
 	} else {
-		console.error({
-			status: 'error',
-			message: "It is not possible show success message (client's error)",
+		console.log({
+			status: 'warning',
+			message: "There isn't form submission error message (client's error)",
 		});
 	}
+
+	// función para validar formularios
+	const formValidations = (form) => {
+		const inputs = form.querySelectorAll(
+			'input[type="text"], input[type="password"]'
+		);
+		let isValid = true;
+
+		inputs.forEach((input) => {
+			const value = input.value.trim();
+			const feedback = input.nextElementSibling;
+
+			if (value === '') {
+				feedback.textContent = 'El campo no puede estar vacío';
+				feedback.classList.remove('valid-feedback');
+				feedback.classList.add('invalid-feedback');
+				input.classList.add('is-invalid');
+				isValid = false;
+			} else if (
+				input.type === 'text' &&
+				input.name !== 'user_name' &&
+				/\d/.test(value)
+			) {
+				feedback.textContent = 'El campo no puede contener números';
+				feedback.classList.remove('valid-feedback');
+				feedback.classList.add('invalid-feedback');
+				input.classList.add('is-invalid');
+				isValid = false;
+			} else if (
+				input.type === 'text' &&
+				input.name === 'user_name' &&
+				value.length < 8
+			) {
+				feedback.textContent = 'El username debe tener al menos 8 caracteres';
+				feedback.classList.remove('valid-feedback');
+				feedback.classList.add('invalid-feedback');
+				input.classList.add('is-invalid');
+				isValid = false;
+			} else if (
+				input.type === 'password' &&
+				(value.length < 8 ||
+					!/[A-Z]/.test(value) ||
+					!/\d/.test(value) ||
+					!/[!@#$%^&*]/.test(value))
+			) {
+				feedback.textContent =
+					'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, un número y un símbolo';
+				feedback.classList.remove('valid-feedback');
+				feedback.classList.add('invalid-feedback');
+				input.classList.add('is-invalid');
+				isValid = false;
+			} else {
+				feedback.textContent = 'Válido.';
+				feedback.classList.remove('invalid-feedback');
+				feedback.classList.add('valid-feedback');
+				input.classList.remove('is-invalid');
+				input.classList.add('is-valid');
+			}
+		});
+
+		return isValid;
+	};
 
 	// función para el envío de formularios
 	const sendForm = (formAction) => {
 		switch (formAction) {
-			// login
-			case '/api/user/login':
-				const user_name = document.getElementById('user_name').value;
-				const user_pass = document.getElementById('user_pass').value;
-
-				fetch('/api/user/login', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						user_name: user_name,
-						user_pass: user_pass,
-					}),
-				})
-					.then(() => {
-						if (response.ok) {
-							console.log({
-								status: 'success',
-								message: "Login successful (client's message)",
-							});
-						} else {
-							saveFailureMessage();
-							window.location.href = '/login';
-						}
-					})
-					.catch((error) => {
-						saveFailureMessage();
-						console.error({
-							status: 'error',
-							message: "It is not possible log in (client's error)",
-							error,
-						});
-					});
-				break;
-
-			// registrar usuario
-			case '/api/user':
-				const user_firstname = document.getElementById('user_firstname').value;
-				const user_lastname = document.getElementById('user_lastname').value;
-				const userName = document.getElementById('user_name').value;
-				const userPass = document.getElementById('user_pass').value;
-
-				fetch('/api/user/', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						user_firstname: user_firstname,
-						user_lastname: user_lastname,
-						user_name: userName,
-						user_pass: userPass,
-					}),
-				})
-					.then((response) => {
-						if (response.ok) {
-							console.log({
-								status: 'success',
-								message: "User created successfully (client's message)",
-							});
-						} else {
-							saveFailureMessage();
-							window.location.href = '/register';
-						}
-					})
-					.catch((error) => {
-						saveFailureMessage();
-						console.error({
-							status: 'error',
-							message: "It is not possible register (client's error)",
-							error,
-						});
-					});
-				break;
-
 			// actualizar usuario
 			case '/api/user/:uid':
 				const userFirstName = document.getElementById(
@@ -386,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				).value;
 				const username = document.getElementById('user_name_update').value;
 				let userpass = document.getElementById('user_pass_update').value;
-				if (userpass === '********') {
+				if (userpass === 'Pas$w0rd') {
 					userpass = '';
 				}
 
@@ -541,21 +531,40 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (addNewTaskForm) {
 		addNewTaskForm.addEventListener('submit', (event) => {
 			event.preventDefault();
-			sendForm('/api/task');
+			const isValid = formValidations(addNewTaskForm);
+			if (isValid) {
+				sendForm('/api/task');
+			}
 		});
 	}
 
 	if (editTaskForm) {
 		editTaskForm.addEventListener('submit', (event) => {
 			event.preventDefault();
-			sendForm('/api/task/:id');
+			const isValid = formValidations(editTaskForm);
+			if (isValid) {
+				sendForm('/api/task/:id');
+			}
 		});
 	}
 
 	if (editProfileForm) {
 		editProfileForm.addEventListener('submit', (event) => {
 			event.preventDefault();
-			sendForm('/api/user/:uid');
+			const isValid = formValidations(editProfileForm);
+			if (isValid) {
+				sendForm('/api/user/:uid');
+			}
+		});
+	}
+
+	if (registerForm) {
+		registerForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const isValid = formValidations(registerForm);
+			if (isValid) {
+				registerForm.submit();
+			}
 		});
 	}
 });
