@@ -29,7 +29,12 @@
 		<header>
 			<nav class="navbar navbar-expand-lg sticky-top bg-dark">
 				<div class="container-fluid">
-					<a class="navbar-brand" href="/">
+					<a
+						class="navbar-brand"
+						href="/"
+						title="Link a la página Inicio"
+						aria-label="Link a la página Inicio"
+					>
 						<img
 							src="../img/logo_bco.webp"
 							alt="logo de Tech Nexus, empresa de desarrollo"
@@ -51,15 +56,29 @@
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav m-auto">
 							<li class="nav-item">
-								<a class="nav-link" href="/">Inicio</a>
+								<a
+									class="nav-link"
+									href="/"
+									aria-label="Link a la página Inicio"
+									>Inicio</a
+								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="/register"
+								<a
+									class="nav-link"
+									aria-current="page"
+									href="/register"
+									aria-label="Link a la página Registrarse"
 									>Registrarse</a
 								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/login">Login</a>
+								<a
+									class="nav-link"
+									href="/login"
+									aria-label="Link a la página Login"
+									>Login</a
+								>
 							</li>
 						</ul>
 					</div>
@@ -76,6 +95,7 @@
 					<span
 						id="failureMessage"
 						class="d-none alert alert-danger my-2"
+						role="alert"
 					></span>
 				</div>
 
@@ -88,60 +108,88 @@
 					>
 						<div class="container p-2 m-2">
 							<div class="mb-3 mt-3">
-								<label for="user_firstname" class="form-label">Nombre:</label>
+								<label for="user_firstname_register" class="form-label"
+									>Nombre:</label
+								>
 								<input
 									type="text"
 									class="form-control border border-dark"
-									id="user_firstname"
-									placeholder="Introduce tu nombre"
+									id="user_firstname_register"
+									placeholder="Nombre"
 									name="user_firstname"
+									title="Ingrese un nombre"
+									aria-label="Ingrese un nombre"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3 mt-3">
-								<label for="user_lastname" class="form-label">Apellido:</label>
+								<label for="user_lastname_register" class="form-label"
+									>Apellido:</label
+								>
 								<input
 									type="text"
 									class="form-control border border-dark"
-									id="user_lastname"
-									placeholder="Introduce tu apellido"
+									id="user_lastname_register"
+									placeholder="Apellido"
 									name="user_lastname"
+									title="Ingrese un apellido"
+									aria-label="Ingrese un apellido"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3 mt-3">
-								<label for="user_name" class="form-label">Username:</label>
+								<label for="user_name_register" class="form-label"
+									>Username:</label
+								>
 								<input
 									type="text"
 									class="form-control border border-dark"
-									id="user_name"
-									placeholder="Introduce tu usuario"
+									id="user_name_register"
+									placeholder="Usuario"
 									name="user_name"
+									minlength="8"
+									title="Ingrese un nombre de usuario (mínimo 8 carácteres)"
+									aria-label="Ingrese un nombre de usuario (mínimo 8 carácteres)"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3 mt-3">
-								<label for="user_pass" class="form-label">Password:</label>
+								<label for="user_pass_register" class="form-label"
+									>Password:</label
+								>
 								<input
 									type="password"
 									class="form-control border border-dark"
-									id="user_pass"
-									placeholder="Introduce tu password"
+									id="user_pass_register"
+									placeholder="Password"
 									name="user_pass"
+									minlength="8"
+									title="Ingrese un password (mínimo 8 caracteres, 1 mayúscula, 1 símbolo y 1 número)"
+									aria-label="Ingrese un password (mínimo 8 caracteres, 1 mayúscula, 1 símbolo y 1 número)"
 									required
 								/>
+								<button
+									type="button"
+									class="btn btn-secondary btn-sm my-1"
+									id="togglePassword"
+									title="Mostrar u ocultar el password"
+									aria-label="Mostrar u ocultar el password"
+								>
+									<i class="bi bi-eye"></i>
+								</button>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 
 							<p
-								class="text-center alert alert-warning text-dark p-1 fs-6 shadow border border-warning"
+								role="alert"
+								class="text-center alert alert-info text-dark p-1 fs-6 shadow"
 							>
 								Si tu registro es exitoso, serás redirigido a la página de
 								logueo
@@ -155,11 +203,21 @@
 									gap: 10px;
 								"
 							>
-								<button type="submit" class="btn btn-primary mt-3">
+								<button
+									title="Registrar usuario"
+									aria-label="Registrar usuario"
+									type="submit"
+									class="btn btn-dark mt-3"
+								>
 									Registrar
 								</button>
-								<button type="reset" class="btn btn-secondary mt-3">
-									Borrar
+								<button
+									title="Borrar todo el texto ingresado en el formulario"
+									aria-label="Borrar todo el texto ingresado en el formulario"
+									type="reset"
+									class="btn btn-outline-danger mt-3"
+								>
+									Borrar todo
 								</button>
 							</div>
 						</div>
@@ -178,6 +236,7 @@
 								href="https://github.com/dardosantana"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Dardo Santana, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Dardo Santana</a
 							>
 						</div>
@@ -188,6 +247,7 @@
 								href="https://github.com/Lautidelamano"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Lautaro de la Mano, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Lautaro de la Mano</a
 							>
 						</div>
@@ -207,6 +267,7 @@
 								href="https://github.com/Rasta0705"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Fernando Barrionuevo, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Fernando Barrionuevo</a
 							>
 						</div>
@@ -217,6 +278,7 @@
 								href="https://github.com/mario-r-aguilar"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Mario Aguilar, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Mario Aguilar</a
 							>
 						</div>

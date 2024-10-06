@@ -29,7 +29,12 @@
 		<header>
 			<nav class="navbar navbar-expand-lg sticky-top bg-dark">
 				<div class="container-fluid">
-					<a class="navbar-brand" href="/">
+					<a
+						class="navbar-brand"
+						href="/"
+						title="Link a la página Inicio"
+						aria-label="Link a la página Inicio"
+					>
 						<img
 							src="../img/logo_bco.webp"
 							alt="logo de Tech Nexus, empresa de desarrollo"
@@ -51,13 +56,29 @@
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav m-auto">
 							<li class="nav-item">
-								<a class="nav-link" href="/">Inicio</a>
+								<a
+									class="nav-link"
+									href="/"
+									aria-label="Link a la página Inicio"
+									>Inicio</a
+								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/register">Registrarse</a>
+								<a
+									class="nav-link"
+									href="/register"
+									aria-label="Link a la página Registrarse"
+									>Registrarse</a
+								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="/login">Login</a>
+								<a
+									class="nav-link"
+									aria-current="page"
+									href="/login"
+									aria-label="Link a la página Login"
+									>Login</a
+								>
 							</li>
 						</ul>
 					</div>
@@ -74,6 +95,7 @@
 					<span
 						id="failureMessage"
 						class="d-none alert alert-danger my-2"
+						role="alert"
 					></span>
 				</div>
 
@@ -86,34 +108,52 @@
 					>
 						<div class="container p-2 m-3 mb-5">
 							<div class="mb-5 mt-2">
-								<label for="user_name" class="form-label">Usuario:</label>
+								<label for="user_name_login" class="form-label">Usuario:</label>
 								<input
 									type="text"
 									class="form-control border border-dark"
-									id="user_name"
-									placeholder="Introduce tu usuario"
+									id="user_name_login"
+									placeholder="Usuario"
+									minlength="8"
 									name="user_name"
+									title="Ingrese su nombre de usuario (recuerde que tiene 8 carácteres como mínimo)"
+									aria-label="Ingrese su nombre de usuario (recuerde que tiene 8 carácteres como mínimo)"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-5 mt-3">
-								<label for="user_pass" class="form-label">Password:</label>
+								<label for="user_pass_login" class="form-label"
+									>Password:</label
+								>
 								<input
 									type="password"
 									class="form-control border border-dark"
-									id="user_pass"
-									placeholder="Introduce tu password"
+									id="user_pass_login"
+									placeholder="Password"
+									minlength="8"
 									name="user_pass"
+									title="Ingrese su password (recuerde que tiene 8 carácteres como mínimo, 1 mayúscula, 1 símbolo y 1 número)"
+									aria-label="Ingrese su password (recuerde que tiene 8 carácteres como mínimo, 1 mayúscula, 1 símbolo y 1 número)"
 									required
 								/>
+								<button
+									type="button"
+									class="btn btn-secondary btn-sm my-1"
+									id="togglePassword"
+									title="Mostrar u ocultar el password"
+									aria-label="Mostrar u ocultar el password"
+								>
+									<i class="bi bi-eye"></i>
+								</button>
 								<div class="valid-feedback">Válido.</div>
 								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 
 							<p
-								class="text-center alert alert-warning text-dark p-1 fs-6 shadow border border-warning"
+								class="text-center alert alert-info text-dark p-1 fs-6 shadow"
+								role="alert"
 							>
 								Si tu logueo es exitoso, serás redirigido a la página de tu
 								perfil
@@ -127,11 +167,21 @@
 									gap: 10px;
 								"
 							>
-								<button type="submit" class="btn btn-primary mt-3">
+								<button
+									type="submit"
+									class="btn btn-dark mt-3"
+									title="Acceder a la aplicación"
+									aria-label="Acceder a la aplicación"
+								>
 									Acceder
 								</button>
-								<button type="reset" class="btn btn-secondary mt-3">
-									Borrar
+								<button
+									type="reset"
+									class="btn btn-outline-danger mt-3"
+									title="Borrar todo el texto ingresado en el formulario"
+									aria-label="Borrar todo el texto ingresado en el formulario"
+								>
+									Borrar todo
 								</button>
 							</div>
 						</div>
@@ -151,6 +201,7 @@
 								href="https://github.com/dardosantana"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Dardo Santana, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Dardo Santana</a
 							>
 						</div>
@@ -161,6 +212,7 @@
 								href="https://github.com/Lautidelamano"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Lautaro de la Mano, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Lautaro de la Mano</a
 							>
 						</div>
@@ -180,6 +232,7 @@
 								href="https://github.com/Rasta0705"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Fernando Barrionuevo, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Fernando Barrionuevo</a
 							>
 						</div>
@@ -190,6 +243,7 @@
 								href="https://github.com/mario-r-aguilar"
 								rel="noopener noreferrer"
 								target="_blank"
+								aria-label="Abre el perfil de GitHub de Mario Aguilar, uno de los desarrolladores de este sitio, en otra pestaña"
 								>Mario Aguilar</a
 							>
 						</div>

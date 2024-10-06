@@ -29,7 +29,12 @@
 		<header>
 			<nav class="navbar navbar-expand-lg sticky-top bg-dark">
 				<div class="container-fluid">
-					<a class="navbar-brand" href="/profile">
+					<a
+						class="navbar-brand"
+						href="/profile"
+						title="Link a la página Mi perfil"
+						aria-label="Link a la página Mi perfil"
+					>
 						<img
 							src="../img/logo_bco.webp"
 							alt="logo de Tech Nexus, empresa de desarrollo"
@@ -51,15 +56,30 @@
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav m-auto">
 							<li class="nav-item">
-								<a class="nav-link" href="/profile">Mi perfil</a>
+								<a
+									class="nav-link"
+									href="/profile"
+									aria-label="Link a la página Mi Perfil"
+									>Mi perfil</a
+								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="/editprofile"
+								<a
+									class="nav-link"
+									aria-current="page"
+									href="/editprofile"
+									aria-label="Link a la página Editar Perfil"
 									>Editar Perfil</a
 								>
 							</li>
 							<li class="nav-item">
-								<a id="logOutBtn" class="nav-link" href="#">Desloguearse</a>
+								<a
+									id="logOutBtn"
+									class="nav-link"
+									href="#"
+									aria-label="Botón para desloguearse de la aplicación"
+									>Desloguearse</a
+								>
 							</li>
 						</ul>
 					</div>
@@ -76,6 +96,7 @@
 					<span
 						id="failureMessage"
 						class="d-none alert alert-danger my-2"
+						role="alert"
 					></span>
 				</div>
 
@@ -95,13 +116,13 @@
 									class="form-control"
 									id="user_firstname_update"
 									name="user_firstname"
-									placeholder="Ingresa tu nombre"
+									placeholder="Nombre"
+									title="Edite su nombre"
+									aria-label="Edite su nombre"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
-								<div class="invalid-feedback">
-									El campo no puede estar vacío.
-								</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3">
 								<label for="user_lastname_update" class="form-label"
@@ -112,59 +133,80 @@
 									class="form-control"
 									id="user_lastname_update"
 									name="user_lastname"
-									placeholder="Ingresa tu apellido"
+									placeholder="Apellido"
+									title="Edite su apellido"
+									aria-label="Edite su apellido"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
-								<div class="invalid-feedback">
-									El campo no puede estar vacío.
-								</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-3">
 								<label for="user_name_update" class="form-label"
-									>Usuario:</label
+									>Username:</label
 								>
 								<input
 									type="text"
 									class="form-control"
 									id="user_name_update"
 									name="user_name"
-									placeholder="Ingresa tu nuevo usuario"
+									minlength="8"
+									placeholder="Usuario"
+									title="Edite tu nombre de usuario (mínimo 8 carácteres)"
+									aria-label="Edite tu nombre de usuario (mínimo 8 carácteres)"
 									required
 								/>
 								<div class="valid-feedback">Válido.</div>
-								<div class="invalid-feedback">
-									El campo no puede estar vacío.
-								</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 							<div class="mb-4">
 								<label for="user_pass_update" class="form-label"
-									>Contraseña:</label
+									>Password:</label
 								>
 								<input
 									type="password"
 									class="form-control"
 									id="user_pass_update"
 									name="user_pass"
-									placeholder="Ingresa tu nueva contraseña"
+									minlength="8"
+									placeholder="Password"
+									title="Edite su password (mínimo 8 caracteres, 1 mayúscula, 1 símbolo y 1 número)"
+									aria-label="Edite su password (mínimo 8 caracteres, 1 mayúscula, 1 símbolo y 1 número)"
 									required
 								/>
+								<button
+									type="button"
+									class="btn btn-secondary btn-sm my-1"
+									id="togglePassword"
+									title="Mostrar u ocultar el password"
+									aria-label="Mostrar u ocultar el password"
+								>
+									<i class="bi bi-eye"></i>
+								</button>
 								<div class="valid-feedback">Válido.</div>
-								<div class="invalid-feedback">
-									El campo no puede estar vacío.
-								</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
 							</div>
 
 							<p
-								class="text-center alert alert-warning text-dark p-1 fs-6 shadow border border-warning"
+								class="text-center alert alert-info text-dark p-1 fs-6 shadow"
+								role="alert"
 							>
 								Al guardar los cambios serás redirigido a la página de logueo
 							</p>
 							<div class="d-flex justify-content-center">
-								<button type="submit" class="btn btn-primary">
-									Guardar Cambios
+								<button
+									type="submit"
+									class="btn btn-dark"
+									title="Editar los datos del usuario"
+									aria-label="Editar los datos del usuario"
+								>
+									Editar mi perfil
 								</button>
-								<a class="btn btn-secondary ms-3" role="button" href="/profile"
+								<a
+									class="btn btn-secondary ms-3"
+									title="Volver a la página Mi perfil"
+									aria-label="Volver a la página Mi perfil"
+									href="/profile"
 									>Volver</a
 								>
 							</div>

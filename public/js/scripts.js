@@ -81,10 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				<td>${task.task_description}</td> <!-- Estado de la tarea -->
 				<td>${task.task_status}</td> <!-- Estado de la tarea -->			
 				<td>
-					<button data-id="${task.task_id}" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#confirmUpdateTask" >
+					<button data-id="${task.task_id}" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#confirmUpdateTask" title="Editar la tarea seleccionada" aria-label="Editar la tarea seleccionada">
 						Editar
 					</button>
-					<button type="button" data-id="${task.task_id}" class="btn btn-danger btn-sm del-btn" data-bs-toggle="modal" data-bs-target="#deleteTask" >
+					<button type="button" data-id="${task.task_id}" class="btn btn-danger btn-sm del-btn" data-bs-toggle="modal" data-bs-target="#deleteTask" title="Eliminar la tarea seleccionada" aria-label="Eliminar la tarea seleccionada">
 						Eliminar
 					</button>
 				</td>
@@ -145,9 +145,36 @@ document.addEventListener('DOMContentLoaded', () => {
 	const addNewTaskForm = document.getElementById('addNewTaskForm');
 	const editTaskForm = document.getElementById('editTaskForm');
 	const editProfileForm = document.getElementById('editProfile');
-	const taskDataTable = document.getElementById('taskDataTable');
-	const loginForm = document.getElementById('loginForm');
 	const registerForm = document.getElementById('registerForm');
+	const taskDataTable = document.getElementById('taskDataTable');
+	const togglePassword = document.getElementById('togglePassword');
+	const passwordRegisterField = document.getElementById('user_pass_register');
+	const passwordLoginField = document.getElementById('user_pass_login');
+	const passwordEditProfileField = document.getElementById('user_pass_update');
+
+	// Función para mostrar u ocultar password
+	const togglePasswordField = (passwordField) => {
+		togglePassword.addEventListener('click', function () {
+			const type =
+				passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+			passwordField.setAttribute('type', type);
+
+			const icon =
+				type === 'password'
+					? '<i class="bi bi-eye"></i>'
+					: '<i class="bi bi-eye-slash"></i>';
+			this.innerHTML = icon;
+		});
+	};
+	if (passwordRegisterField) {
+		togglePasswordField(passwordRegisterField);
+	}
+	if (passwordLoginField) {
+		togglePasswordField(passwordLoginField);
+	}
+	if (passwordEditProfileField) {
+		togglePasswordField(passwordEditProfileField);
+	}
 
 	// ejecuta función para obtener la ID del usuario
 	if (addNewTaskForm || editTaskForm || editProfileForm || taskDataTable) {
@@ -200,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				userFirstName.value = data.firstname;
 				userLastName.value = data.lastname;
 				username.value = data.username;
-				userpass.value = 'Pas$w0rd';
+				userpass.value = 'Por-Seguridad-No-Se-Muestra-Su-Password-Actual-1';
 			})
 			.catch((error) => {
 				console.error({
@@ -376,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				).value;
 				const username = document.getElementById('user_name_update').value;
 				let userpass = document.getElementById('user_pass_update').value;
-				if (userpass === 'Pas$w0rd') {
+				if (userpass === 'Por-Seguridad-No-Se-Muestra-Su-Password-Actual-1') {
 					userpass = '';
 				}
 

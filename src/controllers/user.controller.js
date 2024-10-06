@@ -255,7 +255,7 @@ export const loginUser = async (req, res) => {
 				lastname: user.user_lastname,
 			},
 			environment.jwt_secret,
-			{ expiresIn: '1h' }
+			{ expiresIn: '8h' }
 		);
 
 		// almacena token en cookie
@@ -263,7 +263,7 @@ export const loginUser = async (req, res) => {
 			httpOnly: true,
 			secure: environment.secure_cookie, // Solo se envía a través de https si es true
 			sameSite: 'Strict', // Protege contra CSRF
-			maxAge: 3600000, // Expira en 1 hora
+			maxAge: 28800000, // Expira en 8 horas
 		});
 
 		res.status(200).redirect('/profile');
