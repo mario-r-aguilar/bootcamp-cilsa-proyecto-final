@@ -23,6 +23,7 @@ editarlas, eliminarlas y también puede editar sus datos registrados si lo desea
 - [Base de Datos](#Motor)
 - [Rutas](#Rutas)
 - [Requests y Responses](#Ejemplos)
+- [Seguridad](#Seguridad)
 - [Manejo de Errores y Despliegue del Servidor](#Errores)
 - [Estructura de Carpetas del Frontend](#Frontend)
 - [Páginas y Navegabilidad](#Páginas)
@@ -464,6 +465,13 @@ _Response_
 
 [Ir al Indice](#Indice)
 
+### Seguridad
+
+Una vez realizado el logueo en la aplicación, se genera un token mediante la librería JWT con una duración de 8 horas. Este token se almacena en una cookie a través de cookieParser y se configura para no se puede acceder mediante JavaScript en el lado del cliente. Esto ayuda a proteger la cookie de ataques como el Cross-Site Scripting (XSS), ya que los scripts maliciosos no podrán leer su contenido. Asimismo se configura solo para ser enviada en solicitudes del mismo sitio, protegiendo contra ataques de Cross-Site Request Forgery (CSRF) que puedan ocurrir en solicitudes de terceros. Una vez en producción también se puede setear que solo pueda ser enviada a través de conexiones HTTPS.
+También es conveniente aclarar que los passwords son hasheados utilizando bcrypt antes de ser almacenados en la base de datos.
+
+[Ir al Indice](#Indice)
+
 ### Errores
 
 ### Manejo de Errores
@@ -590,8 +598,14 @@ Se utilizaron los colores incluídos en Bootstrap y se combinaron de manera que 
 ### Accesibilidad
 
 **El sitio es completamente semántico, responsive y utiliza ARIA** (Accessible Rich Internet Applications) solo en los casos donde no existe una etiqueta semántica que cumpla la función.
-El sitio ha sido probado con diferentes herramientas en línea como **WAVE, Lighthouse y Axe Accessibility Checker**, para comprobar problemas con accesibilidad y no se detectaron inconvenientes. También se comprobó la navegación mediante el teclado y utilizando el **lector de pantalla NVDA** con óptimos resultados.
-Asimismo se verificó la estructura HTML con **Markup Validation Service** para garantizar una correcta maquetación.
+El sitio ha sido probado con diferentes herramientas en línea como **WAVE y Lighthouse**, para comprobar problemas con accesibilidad y no se detectaron inconvenientes. También se comprobó la navegación mediante el teclado y utilizando el **lector de pantalla NVDA** con óptimos resultados.
+Asimismo se verificó la estructura HTML con **W3C Markup Validation Service** para garantizar una correcta maquetación.
+
+![muestra de un resultado del analisis con WAVE](./public/img/proyect-docs/wave-validator.webp)
+
+![muestra de un resultado del analisis con Lighthouse](./public/img/proyect-docs/lighthouse.webp)
+
+![muestra de un resultado del analisis con W3C Markup Validation Service](./public/img/proyect-docs/html-validator.webp)
 
 [Ir al Indice](#Indice)
 
