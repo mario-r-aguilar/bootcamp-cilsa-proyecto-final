@@ -1,4 +1,4 @@
-# Proyecto Final Grupo 3: Tech Nexus | To Do List
+# Proyecto Final Grupo 3: By Nexus | To Do List
 
 **Bootcamp CILSA Full Stack Developer**
 
