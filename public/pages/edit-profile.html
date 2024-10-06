@@ -22,17 +22,22 @@
 		/>
 		<!-- Own styles -->
 		<link rel="stylesheet" href="../css/main-style.css" />
-
 		<title>Editar Perfil de Usuario | Perfil</title>
 	</head>
+
 	<body>
 		<header>
 			<nav class="navbar navbar-expand-lg sticky-top bg-dark">
 				<div class="container-fluid">
-					<a class="navbar-brand" href="./user-profile.html">
+					<a
+						class="navbar-brand"
+						href="/profile"
+						title="Link a la página Mi perfil"
+						aria-label="Link a la página Mi perfil"
+					>
 						<img
 							src="../img/logo_bco.webp"
-							alt="Bootstrap"
+							alt="logo de Tech Nexus, empresa de desarrollo"
 							width="75"
 							height="75"
 						/>
@@ -53,19 +58,28 @@
 							<li class="nav-item">
 								<a
 									class="nav-link"
-									aria-current="page"
-									href="./user-profile.html"
+									href="/profile"
+									aria-label="Link a la página Mi Perfil"
 									>Mi perfil</a
 								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="./new-task.html">Agregar tarea</a>
+								<a
+									class="nav-link"
+									aria-current="page"
+									href="/editprofile"
+									aria-label="Link a la página Editar Perfil"
+									>Editar Perfil</a
+								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="./edit-profile.html">Editar Perfil</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Desloguearse</a>
+								<a
+									id="logOutBtn"
+									class="nav-link"
+									href="#"
+									aria-label="Botón para desloguearse de la aplicación"
+									>Desloguearse</a
+								>
 							</li>
 						</ul>
 					</div>
@@ -76,7 +90,129 @@
 		<main class="mt-5 mb-5">
 			<div class="container">
 				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
-				EDITAR PERFIL
+				<h1 class="text-center mb-4">Editar Perfil</h1>
+
+				<div class="mb-2 sticky-top">
+					<span
+						id="failureMessage"
+						class="d-none alert alert-danger my-2"
+						role="alert"
+					></span>
+				</div>
+
+				<div class="row d-flex justify-content-center mt-3">
+					<form
+						id="editProfile"
+						class="col-12 col-md-6 shadow border-light border p-4 rounded mb-3"
+						action="/api/user/:uid"
+					>
+						<div class="container p-2 m-2">
+							<div class="mb-3">
+								<label for="user_firstname_update" class="form-label"
+									>Nombre:</label
+								>
+								<input
+									type="text"
+									class="form-control"
+									id="user_firstname_update"
+									name="user_firstname"
+									placeholder="Nombre"
+									title="Edite su nombre"
+									aria-label="Edite su nombre"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div class="mb-3">
+								<label for="user_lastname_update" class="form-label"
+									>Apellido:</label
+								>
+								<input
+									type="text"
+									class="form-control"
+									id="user_lastname_update"
+									name="user_lastname"
+									placeholder="Apellido"
+									title="Edite su apellido"
+									aria-label="Edite su apellido"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div class="mb-3">
+								<label for="user_name_update" class="form-label"
+									>Username:</label
+								>
+								<input
+									type="text"
+									class="form-control"
+									id="user_name_update"
+									name="user_name"
+									minlength="8"
+									placeholder="Usuario"
+									title="Edite tu nombre de usuario (mínimo 8 carácteres)"
+									aria-label="Edite tu nombre de usuario (mínimo 8 carácteres)"
+									required
+								/>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+							<div class="mb-4">
+								<label for="user_pass_update" class="form-label"
+									>Password:</label
+								>
+								<input
+									type="password"
+									class="form-control"
+									id="user_pass_update"
+									name="user_pass"
+									minlength="8"
+									placeholder="Password"
+									title="Edite su password (mínimo 8 caracteres, 1 mayúscula, 1 símbolo y 1 número)"
+									aria-label="Edite su password (mínimo 8 caracteres, 1 mayúscula, 1 símbolo y 1 número)"
+									required
+								/>
+								<button
+									type="button"
+									class="btn btn-secondary btn-sm my-1"
+									id="togglePassword"
+									title="Mostrar u ocultar el password"
+									aria-label="Mostrar u ocultar el password"
+								>
+									<i class="bi bi-eye"></i>
+								</button>
+								<div class="valid-feedback">Válido.</div>
+								<div class="invalid-feedback">Contenido inválido.</div>
+							</div>
+
+							<p
+								class="text-center alert alert-info text-dark p-1 fs-6 shadow"
+								role="alert"
+							>
+								Al guardar los cambios serás redirigido a la página de logueo
+							</p>
+							<div class="d-flex justify-content-center">
+								<button
+									type="submit"
+									class="btn btn-dark"
+									title="Editar los datos del usuario"
+									aria-label="Editar los datos del usuario"
+								>
+									Editar mi perfil
+								</button>
+								<a
+									class="btn btn-secondary ms-3"
+									title="Volver a la página Mi perfil"
+									aria-label="Volver a la página Mi perfil"
+									href="/profile"
+									>Volver</a
+								>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</main>
 
@@ -117,7 +253,7 @@
 							<i class="bi bi-github"></i>
 							<a
 								class="footer-link text-light text-decoration-none"
-								href="https://github.com/Rasta07"
+								href="https://github.com/Rasta0705"
 								rel="noopener noreferrer"
 								target="_blank"
 								>Fernando Barrionuevo</a
@@ -138,11 +274,12 @@
 			</div>
 		</footer>
 
-		<!-- Bootstrap Styles -->
+		<!-- Bootstrap Scripts -->
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 			crossorigin="anonymous"
 		></script>
+		<script src="/js/scripts.js"></script>
 	</body>
 </html>
