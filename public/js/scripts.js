@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				userFirstName.value = data.firstname;
 				userLastName.value = data.lastname;
 				username.value = data.username;
-				userpass.value = 'Por-Seguridad-No-Se-Muestra-Su-Password-Actual-1';
+				userpass.value = 'P4ss******';
 			})
 			.catch((error) => {
 				console.error({
@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				).value;
 				const username = document.getElementById('user_name_update').value;
 				let userpass = document.getElementById('user_pass_update').value;
-				if (userpass === 'Por-Seguridad-No-Se-Muestra-Su-Password-Actual-1') {
+				if (userpass === 'P4ss******') {
 					userpass = '';
 				}
 
