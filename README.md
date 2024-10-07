@@ -15,15 +15,16 @@ Se trata de un sitio web pensado para que una empresa pueda proporcionarle
 a un empleado una herramienta para gestionar sus tareas laborales diarias.
 Es un MVP que permite al empleado crear su usuario, loguearse, agregar tareas,
 editarlas, eliminarlas y también puede editar sus datos registrados si lo desea.
+Además posee una vista de administración para gestionar tareas y usuarios.
 
 ## Indice
 
 - [Arquitectura y Configuración de Entorno](#Arquitectura)
 - [Instalación](#Instalación)
 - [Base de Datos](#Motor)
+- [Seguridad y Roles](#Seguridad)
 - [Rutas](#Rutas)
 - [Requests y Responses](#Ejemplos)
-- [Seguridad](#Seguridad)
 - [Manejo de Errores y Despliegue del Servidor](#Errores)
 - [Estructura de Carpetas del Frontend](#Frontend)
 - [Páginas y Navegabilidad](#Páginas)
@@ -82,6 +83,7 @@ PASSWORD=adminpass
 DATABASE=eccomerce
 JWT_SECRET=secret
 SECURE_COOKIE=false
+ADMIN_NAME=username
 ```
 
 [Ir al Indice](#Indice)
@@ -187,37 +189,55 @@ Las relaciones que existen entre **user_table y task_table** son: Un usuario pue
 
 [Ir al Indice](#Indice)
 
+### Seguridad
+
+Una vez realizado el logueo en la aplicación, se genera un token mediante la librería JWT y se le incorpora el rol del usuario (USER o ADMIN) ya que no está contemplado dentro de la BBDD. Este token cuenta con una duración de 8 horas y se almacena en una cookie a través de cookieParser (misma duración).
+La cookie se configura para no se puede acceder mediante JavaScript en el lado del cliente. Esto ayuda a proteger la cookie de ataques como el Cross-Site Scripting (XSS), ya que los scripts maliciosos no podrán leer su contenido. Asimismo se configura solo para ser enviada en solicitudes del mismo sitio, protegiendo contra ataques de Cross-Site Request Forgery (CSRF) que puedan ocurrir en solicitudes de terceros. Una vez en producción también se puede setear que solo pueda ser enviada a través de conexiones HTTPS.
+También es conveniente aclarar que todos los passwords son hasheados utilizando bcrypt antes de ser almacenados en la base de datos y que los endpoints están protegidos mediante middlewares de autenticación y roles.
+
+### Roles
+
+Por defecto, al loguearse un usuario posee el rol USER. Para cambiar el rol del usuario a administrador (ADMIN), se debe agregar su username como valor de la variable de entorno.
+
+`ADMIN_NAME=username`
+
+Con esta configuración podrá ver el listado completo de tareas y quienes las tienen asignadas, podrá crear tareas y asignarlas a un usuario, podrá editarlas e incluso eliminarlas. Asimismo podrá ver el listado completo de usuarios y eliminarlos. Sin embargo no podrá crearlos, ni editarlos.
+En cuanto al rol USER, podrá crear, editar y eliminar sus propias tareas. Además podrá editar su perfil.
+
+[Ir al Indice](#Indice)
+
 ### Rutas
 
 **Endpoints**
 
-| Método | Ruta                   | Descripción                                       | Autenticación |
-| ------ | ---------------------- | ------------------------------------------------- | ------------- |
-| GET    | `/api/user`            | Obtiene el listado total de usuarios              | JWT           |
-| GET    | `/api/user/via/:uid`   | Obtiene un usuario por su ID                      | JWT           |
-| GET    | `/api/user/by/:usernm` | Obtiene un usuario por su username                | JWT           |
-| POST   | `/api/user`            | Crea un usuario en la base de datos               | -             |
-| PUT    | `/api/user/:uid`       | Actualiza los datos almacenados de un usuario     | JWT           |
-| DELETE | `/api/user/:uid`       | Elimina un usuario de la base de datos            | JWT           |
-| POST   | `/api/user/login`      | Loguea a un usuario                               | -             |
-| POST   | `/api/user/logout`     | Desloguea a un usuario                            | JWT           |
-| GET    | `/api/user/current`    | Obtiene los datos del usuario logueado            | JWT           |
-| GET    | `/api/task`            | Obtiene el listado total de tareas                | JWT           |
-| GET    | `/api/task/:id`        | Obtiene una tarea por su ID                       | JWT           |
-| GET    | `/api/task/by/:uid`    | Obtiene el listado de tareas un usuario por su ID | JWT           |
-| POST   | `/api/task`            | Crea una tarea en la base de datos                | JWT           |
-| PUT    | `/api/task/:id`        | Actualiza los datos almacenados de una tarea      | JWT           |
-| DELETE | `/api/task/:id`        | Elimina una tarea de la base de datos             | JWT           |
+| Método | Ruta                   | Descripción                                       | Autenticación | Rol   |
+| ------ | ---------------------- | ------------------------------------------------- | ------------- | ----- |
+| GET    | `/api/user`            | Obtiene el listado total de usuarios              | JWT           | ADMIN |
+| GET    | `/api/user/via/:uid`   | Obtiene un usuario por su ID                      | JWT           | TODOS |
+| GET    | `/api/user/by/:usernm` | Obtiene un usuario por su username                | JWT           | TODOS |
+| POST   | `/api/user`            | Crea un usuario en la base de datos               | -             | TODOS |
+| PUT    | `/api/user/:uid`       | Actualiza los datos almacenados de un usuario     | JWT           | USER  |
+| DELETE | `/api/user/:uid`       | Elimina un usuario de la base de datos            | JWT           | ADMIN |
+| POST   | `/api/user/login`      | Loguea a un usuario                               | -             | TODOS |
+| POST   | `/api/user/logout`     | Desloguea a un usuario                            | JWT           | TODOS |
+| GET    | `/api/user/current`    | Obtiene los datos del usuario logueado            | JWT           | TODOS |
+| GET    | `/api/task`            | Obtiene el listado total de tareas                | JWT           | ADMIN |
+| GET    | `/api/task/:id`        | Obtiene una tarea por su ID                       | JWT           | TODOS |
+| GET    | `/api/task/by/:uid`    | Obtiene el listado de tareas un usuario por su ID | JWT           | TODOS |
+| POST   | `/api/task`            | Crea una tarea en la base de datos                | JWT           | TODOS |
+| PUT    | `/api/task/:id`        | Actualiza los datos almacenados de una tarea      | JWT           | TODOS |
+| DELETE | `/api/task/:id`        | Elimina una tarea de la base de datos             | JWT           | TODOS |
 
 **Vistas**
 
-| Ruta           | Descripción          | Autenticación |
-| -------------- | -------------------- | ------------- |
-| `/`            | Página Inicio        | -             |
-| `/login`       | Página Login         | -             |
-| `/register`    | Página Registro      | -             |
-| `/profile`     | Página Mi Perfil     | JWT           |
-| `/editprofile` | Página Editar Perfil | JWT           |
+| Ruta            | Descripción           | Autenticación | Rol   |
+| --------------- | --------------------- | ------------- | ----- |
+| `/`             | Página Inicio         | -             | TODOS |
+| `/login`        | Página Login          | -             | TODOS |
+| `/register`     | Página Registro       | -             | TODOS |
+| `/profile`      | Página Mi Perfil      | JWT           | USER  |
+| `/editprofile`  | Página Editar Perfil  | JWT           | USER  |
+| `/adminprofile` | Página Administración | JWT           | ADMIN |
 
 [Ir al Indice](#Indice)
 
@@ -465,13 +485,6 @@ _Response_
 
 [Ir al Indice](#Indice)
 
-### Seguridad
-
-Una vez realizado el logueo en la aplicación, se genera un token mediante la librería JWT con una duración de 8 horas. Este token se almacena en una cookie a través de cookieParser y se configura para no se puede acceder mediante JavaScript en el lado del cliente. Esto ayuda a proteger la cookie de ataques como el Cross-Site Scripting (XSS), ya que los scripts maliciosos no podrán leer su contenido. Asimismo se configura solo para ser enviada en solicitudes del mismo sitio, protegiendo contra ataques de Cross-Site Request Forgery (CSRF) que puedan ocurrir en solicitudes de terceros. Una vez en producción también se puede setear que solo pueda ser enviada a través de conexiones HTTPS.
-También es conveniente aclarar que los passwords son hasheados utilizando bcrypt antes de ser almacenados en la base de datos.
-
-[Ir al Indice](#Indice)
-
 ### Errores
 
 ### Manejo de Errores
@@ -611,6 +624,8 @@ Asimismo se verificó la estructura HTML con **W3C Markup Validation Service** p
 
 ### Capturas
 
+### Vista de usuario
+
 **Inicio**
 
 ![muestra una captura de la página inicio](./public/img/proyect-docs/captura-inicio.webp)
@@ -636,6 +651,18 @@ Asimismo se verificó la estructura HTML con **W3C Markup Validation Service** p
 **Editar perfil**
 
 ![muestra una captura de la página editar perfil](./public/img/proyect-docs/captura-editar-perfil.webp)
+
+### Vista de administrador
+
+**Administración**
+
+![muestra una captura de la página de administración con el listado de tareas](./public/img/proyect-docs/captura-admin-1.webp)
+
+![muestra una captura de la página de administración con el listado de usuarios](./public/img/proyect-docs/captura-admin-2.webp)
+
+### Funcionamiento
+
+![muestra una imagen animada con todo el funcionamiento del sitio web](./public/img/proyect-docs/funcionamiento.gif)
 
 [Ir al Indice](#Indice)
 

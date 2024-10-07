@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	// Muestra el listado de tareas del usuario
+	// Muestra el listado de tareas de los usuarios
 	const DisplayTasks = async () => {
 		try {
 			const userList = await getUsersList();
@@ -142,14 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	// Muestra el listado de tareas del usuario
+	// Muestra el listado de usuarios
 	const DisplayUsers = async () => {
 		try {
 			const userList = await getUsersList();
 			const response = await fetch('/api/user/current');
 			const data = await response.json();
 
-			// Para evitar que se elimine asimismo
+			// Evita que el usuario se elimine asimismo
 			const userListWithoutCurrentUser = userList.filter((user) => {
 				return user.user_id !== data.userid;
 			});
@@ -183,10 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	// Función para inicializar task DataTable
+	// Función para inicializar task datatable
 	const initializeDataTable = () => {
 		if ($('#taskTableDetail').length) {
-			// Se asegura que solo haya una instancia de Datatable para tareas
+			// Se asegura que solo haya una instancia de datatable para tareas
 			if ($.fn.DataTable.isDataTable('#taskTableDetail')) {
 				$('#taskTableDetail').DataTable().destroy();
 			}
@@ -222,15 +222,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				},
 			};
 
-			// Inicializar DataTable
 			$('#taskTableDetail').DataTable(dataTableOptions);
 		}
 	};
 
-	// Función para inicializar user DataTable
+	// Función para inicializar user datatable
 	const initializeUserDataTable = () => {
 		if ($('#userTableDetail').length) {
-			// Se asegura que solo haya una instancia de Datatable para usuarios
+			// Se asegura que solo haya una instancia de datatable para usuarios
 			if ($.fn.DataTable.isDataTable('#userTableDetail')) {
 				$('#userTableDetail').DataTable().destroy();
 			}
@@ -266,15 +265,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				},
 			};
 
-			// Inicializar DataTable
 			$('#userTableDetail').DataTable(dataTableOptionsUsers);
 		}
 	};
 
-	// Obtiene la ID del usuario logueado
+	// renderiza las tablas y le da funcionalidad a los botones en ella
 	const tableButtons = async () => {
 		try {
-			// Llama a la función DisplayTasks
+			// tablas
 			if (
 				document.getElementById('taskDataTable') ||
 				document.getElementById('userDataTable')
@@ -284,23 +282,22 @@ document.addEventListener('DOMContentLoaded', () => {
 				initializeDataTable();
 				initializeUserDataTable();
 
-				// Obtiene la ID de la tarea
+				// botones de las tablas
 				document.addEventListener('click', function (event) {
 					const editButton = event.target.closest('.edit-btn');
 					const delButton = event.target.closest('.del-btn');
 					const delUserButton = event.target.closest('.del-user-btn');
 
-					// Verificar si se hizo clic en un botón de editar
+					// obtiene el id de la tarea donde se hizo clic
 					if (editButton) {
 						taskId = editButton.getAttribute('data-id');
 						loadTaskValue(taskId);
 					}
-
-					// Verificar si se hizo clic en un botón de eliminar
 					if (delButton) {
 						taskId = delButton.getAttribute('data-id');
 					}
 
+					// obtiene el id del usuario donde se hizo clic
 					if (delUserButton) {
 						userId = delUserButton.getAttribute('data-id');
 					}
@@ -315,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	// permite el funcionamiento de botones de tabla, obtener datos de tareas y validar formularios
+	// ejecuta la función para el renderizado de tablas y sus botones
 	const addNewTaskForm = document.getElementById('addNewTaskForm');
 	const editTaskForm = document.getElementById('editTaskForm');
 	const taskDataTable = document.getElementById('taskDataTable');
@@ -412,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// función para mostrar mensaje de envío erróneo
+	// funciones para mostrar mensaje de envío fallido
 	const saveFailureMessage = () => {
 		localStorage.setItem(
 			'failureMessage',

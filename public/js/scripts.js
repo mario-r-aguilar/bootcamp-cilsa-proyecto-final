@@ -36,9 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		greeting();
 	}
 
-	// COMIENZO DE EDICIÓN
-
-	// Muestra el listado de tareas del usuario
+	// muestra el listado de tareas del usuario logueado
 	const DisplayTasks = async (userid) => {
 		try {
 			const response = await fetch(`/api/task/by/${userid}`);
@@ -102,10 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	// Función para inicializar task DataTable
+	// función para inicializar task datatable
 	const initializeDataTable = () => {
 		if ($('#taskTableDetail').length) {
-			// Se asegura que solo haya una instancia de Datatable para tareas
+			// se asegura que solo haya una instancia de task datatable
 			if ($.fn.DataTable.isDataTable('#taskTableDetail')) {
 				$('#taskTableDetail').DataTable().destroy();
 			}
@@ -141,14 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				},
 			};
 
-			// Inicializar DataTable
 			$('#taskTableDetail').DataTable(dataTableOptions);
 		}
 	};
 
-	// FIN DE EDICION
-
-	// Obtiene la ID del usuario logueado
+	// obtiene la ID del usuario, renderiza la tabla y sus botones
 	const getUserId = async () => {
 		try {
 			const response = await fetch('/api/user/current', {
@@ -159,25 +154,23 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 
 			const data = await response.json();
-			userId = data.userid;
+			userId = data.userid; // obtiene id para otras funciones
 
-			// Llama a la función DisplayTasks solo en user-profile.html
+			// tablas
 			if (document.getElementById('taskDataTable')) {
 				await DisplayTasks(data.userid);
 				initializeDataTable();
 
-				// Obtiene la ID de la tarea
+				// botones de tabla
 				document.addEventListener('click', function (event) {
 					const editButton = event.target.closest('.edit-btn');
 					const delButton = event.target.closest('.del-btn');
 
-					// Verificar si se hizo clic en un botón de editar
+					// obtiene el id de la tarea al presionar el botón
 					if (editButton) {
 						taskId = editButton.getAttribute('data-id');
 						loadTaskValue(taskId);
 					}
-
-					// Verificar si se hizo clic en un botón de eliminar
 					if (delButton) {
 						taskId = delButton.getAttribute('data-id');
 					}
@@ -202,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const passwordLoginField = document.getElementById('user_pass_login');
 	const passwordEditProfileField = document.getElementById('user_pass_update');
 
-	// Función para mostrar u ocultar password
+	// función para mostrar u ocultar password
 	const togglePasswordField = (passwordField) => {
 		togglePassword.addEventListener('click', function () {
 			const type =
@@ -226,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		togglePasswordField(passwordEditProfileField);
 	}
 
-	// ejecuta función para obtener la ID del usuario
+	// ejecuta función que obtiene el ID del usuario logueado y renderiza tablas con sus botones
 	if (addNewTaskForm || editTaskForm || editProfileForm || taskDataTable) {
 		getUserId();
 	}
@@ -257,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// función para obtener los datos del usuario en editar perfil
+	// función para obtener los datos del usuario para editar su perfil
 	const loadProfileValue = () => {
 		const userFirstName = document.getElementById('user_firstname_update');
 		const userLastName = document.getElementById('user_lastname_update');
@@ -351,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// función para mostrar mensaje de envío erróneo
+	// funciones para mostrar mensaje de envío fallido
 	const saveFailureMessage = () => {
 		localStorage.setItem(
 			'failureMessage',

@@ -19,7 +19,7 @@ app.use(cookieParser());
 // carpeta de archivos estáticos
 app.use(express.static(path.join(__dirname, '../public')));
 
-// rutas para api
+// rutas de api
 app.use('/', viewRouter);
 app.use('/api/user', userRouter);
 app.use('/api/task', taskRouter);

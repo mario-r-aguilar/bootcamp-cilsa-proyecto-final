@@ -6,7 +6,7 @@ import {
 	deleteTask,
 } from '../models/task.model.js';
 
-// CRUD
+// task CRUD
 export const getAllTasks = async (req, res) => {
 	try {
 		const listOfTask = await getTasks();
