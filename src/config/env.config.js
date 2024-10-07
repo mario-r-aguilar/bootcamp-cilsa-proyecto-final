@@ -8,4 +8,5 @@ export default {
 	database: process.env.DATABASE,
 	jwt_secret: process.env.JWT_SECRET,
 	secure_cookie: process.env.SECURE_COOKIE,
+	admin_name: process.env.ADMIN_NAME,
 };

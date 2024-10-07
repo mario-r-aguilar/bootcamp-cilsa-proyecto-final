@@ -118,7 +118,7 @@ export const createUser = async (
 			return null;
 		}
 
-		// Hashea password
+		// hashea password
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(user_pass, salt);
 
@@ -152,7 +152,7 @@ export const updateUser = async (user_id, userData) => {
 			return null;
 		}
 
-		// Un array es para los valores a actualizar y el otro para las claves para crear la query
+		// Un array es para los valores a actualizar y el otro para las claves, para crear la query
 		const updates = [];
 		const values = [];
 
@@ -172,14 +172,14 @@ export const updateUser = async (user_id, userData) => {
 		}
 
 		if (user_pass) {
-			// Hashea password
+			// hashea password
 			const salt = await bcrypt.genSalt(10);
 			const hashedPassword = await bcrypt.hash(user_pass, salt);
 			updates.push('user_pass = ?');
 			values.push(hashedPassword);
 		}
 
-		// Agrego la id del usuario actualizado
+		// agrego la id del usuario actualizado
 		values.push(user_id);
 
 		if (updates.length === 0) {

@@ -10,7 +10,7 @@ import {
 	deleteUser,
 } from '../models/user.model.js';
 
-// CRUD
+// user CRUD
 export const getAllUsers = async (req, res) => {
 	try {
 		const listOfUsers = await getUsers();
@@ -23,7 +23,7 @@ export const getAllUsers = async (req, res) => {
 			});
 		}
 
-		// Quita información sensible de la respuesta
+		// quita información sensible de la respuesta
 		const listOfUsersWithoutPass = listOfUsers.map(
 			({ user_pass, ...user }) => user
 		);
@@ -222,12 +222,11 @@ export const deleteOneUser = async (req, res) => {
 	}
 };
 
-// logueo
+// logueo y sesiones
 export const loginUser = async (req, res) => {
 	try {
 		const { user_name, user_pass } = req.body;
 
-		// compara username
 		const user = await getUserByUserName(user_name);
 		if (!user) {
 			return res.status(404).send({
@@ -236,7 +235,6 @@ export const loginUser = async (req, res) => {
 			});
 		}
 
-		// compara password
 		const passwordIsMatch = await bcrypt.compare(user_pass, user.user_pass);
 
 		if (!passwordIsMatch) {
@@ -246,27 +244,30 @@ export const loginUser = async (req, res) => {
 			});
 		}
 
-		// crea token de sesión
-		const token = jwt.sign(
-			{
-				userid: user.user_id,
-				username: user.user_name,
-				firstname: user.user_firstname,
-				lastname: user.user_lastname,
-			},
-			environment.jwt_secret,
-			{ expiresIn: '8h' }
-		);
+		const payload = {
+			userid: user.user_id,
+			username: user.user_name,
+			firstname: user.user_firstname,
+			lastname: user.user_lastname,
+			role: user.user_name === environment.admin_name ? 'ADMIN' : 'USER',
+		};
 
-		// almacena token en cookie
-		res.cookie('token', token, {
-			httpOnly: true,
-			secure: environment.secure_cookie, // Solo se envía a través de https si es true
-			sameSite: 'Strict', // Protege contra CSRF
-			maxAge: 28800000, // Expira en 8 horas
+		const token = jwt.sign(payload, environment.jwt_secret, {
+			expiresIn: '8h',
 		});
 
-		res.status(200).redirect('/profile');
+		res.cookie('token', token, {
+			httpOnly: true, // protege contra XSS (Cross-Site Scripting)
+			secure: environment.secure_cookie, // envia solo a través de https cuando es true
+			sameSite: 'Strict', // protege contra CSRF (Cross-Site Request Forgery)
+			maxAge: 28800000, // expira en 8 horas
+		});
+
+		if (user.user_name === environment.admin_name) {
+			return res.status(200).redirect('/adminprofile');
+		}
+
+		return res.status(200).redirect('/profile');
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({

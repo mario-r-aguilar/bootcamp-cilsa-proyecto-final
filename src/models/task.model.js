@@ -72,7 +72,7 @@ export const createTask = async (
 			return null;
 		}
 
-		// verifica que el usuario exista ya que es una clave foránea
+		// valida el usuario para evitar error por id inexistente
 		const [user] = await connection.execute(
 			'SELECT * FROM user_table WHERE user_id = ?',
 			[user_id]
@@ -114,7 +114,7 @@ export const updateTask = async (task_id, taskData) => {
 			return null;
 		}
 
-		// Un array es para los valores a actualizar y el otro para las claves para crear la query
+		// un array es para los valores a actualizar y el otro para las claves, para crear la query
 		const updates = [];
 		const values = [];
 
@@ -133,7 +133,7 @@ export const updateTask = async (task_id, taskData) => {
 			values.push(task_status);
 		}
 
-		// Agrego la id de la tarea actualizada
+		// agrego la id de la tarea actualizada
 		values.push(task_id);
 
 		if (updates.length === 0) {

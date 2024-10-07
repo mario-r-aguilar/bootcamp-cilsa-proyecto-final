@@ -36,72 +36,114 @@ document.addEventListener('DOMContentLoaded', () => {
 		greeting();
 	}
 
-	// Muestra el listado de tareas del usuario
-	const DisplayTasks = (userId) => {
-		fetch(`/api/task/by/${userId}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data.length === 0) {
-					console.error({
-						status: 'error',
-						message: "No tasks found (client's error)",
-					});
-					return null;
+	// muestra el listado de tareas del usuario logueado
+	const DisplayTasks = async (userid) => {
+		try {
+			const response = await fetch(`/api/task/by/${userid}`);
+			const data = await response.json();
+
+			if (data.length === 0) {
+				console.error({
+					status: 'error',
+					message: "No tasks found (client's error)",
+				});
+				return null;
+			}
+
+			const tasksTableBody = document.querySelector('#taskTable');
+			tasksTableBody.innerHTML = '';
+
+			data.forEach((task) => {
+				switch (task.task_status) {
+					case 'pending':
+						task.task_status = 'Pendiente';
+						break;
+					case 'in progress':
+						task.task_status = 'En curso';
+						break;
+					case 'blocked':
+						task.task_status = 'Bloqueada';
+						break;
+					case 'finished':
+						task.task_status = 'Finalizada';
+						break;
+					default:
+						console.error({
+							status: 'error',
+							message: "Non-existent status (client's error)",
+						});
+						break;
 				}
-
-				const tasksTableBody = document.querySelector('#taskTable');
-				tasksTableBody.innerHTML = '';
-
-				data.forEach((task) => {
-					switch (task.task_status) {
-						case 'pending':
-							task.task_status = 'Pendiente';
-							break;
-						case 'in progress':
-							task.task_status = 'En curso';
-							break;
-						case 'blocked':
-							task.task_status = 'Bloqueada';
-							break;
-						case 'finished':
-							task.task_status = 'Finalizada';
-							break;
-						default:
-							console.error({
-								status: 'error',
-								message: "Non-existent status (client's error)",
-								error,
-							});
-							break;
-					}
-					const row = document.createElement('tr');
-					row.innerHTML = `
+				const row = document.createElement('tr');
+				row.innerHTML = `
 						
 				<td>${task.task_title}</td> <!-- Título de la tarea -->
 				<td>${task.task_description}</td> <!-- Estado de la tarea -->
 				<td>${task.task_status}</td> <!-- Estado de la tarea -->			
 				<td>
 					<button data-id="${task.task_id}" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#confirmUpdateTask" title="Editar la tarea seleccionada" aria-label="Editar la tarea seleccionada">
-						Editar
+						<i class="bi bi-pencil-square"></i>
 					</button>
 					<button type="button" data-id="${task.task_id}" class="btn btn-danger btn-sm del-btn" data-bs-toggle="modal" data-bs-target="#deleteTask" title="Eliminar la tarea seleccionada" aria-label="Eliminar la tarea seleccionada">
-						Eliminar
+						<i class="bi bi-trash"></i>
 					</button>
 				</td>
 			`;
-					tasksTableBody.appendChild(row);
-				});
-			})
-			.catch((error) => {
-				console.error({
-					status: 'error',
-					message: "It is not possible to fetch tasks (client's error)",
-					error,
-				});
+				tasksTableBody.appendChild(row);
 			});
+		} catch (error) {
+			console.error({
+				status: 'error',
+				message: "It is not possible to fetch tasks (client's error)",
+				error,
+			});
+		}
 	};
 
-	// Obtiene la ID del usuario logueado
+	// función para inicializar task datatable
+	const initializeDataTable = () => {
+		if ($('#taskTableDetail').length) {
+			// se asegura que solo haya una instancia de task datatable
+			if ($.fn.DataTable.isDataTable('#taskTableDetail')) {
+				$('#taskTableDetail').DataTable().destroy();
+			}
+
+			const dataTableOptions = {
+				columnDefs: [
+					{ className: 'centered', targets: [0, 1, 2, 3] },
+					{ orderable: false, targets: [3] },
+				],
+				language: {
+					decimal: '',
+					emptyTable: 'No hay datos disponibles en la tabla',
+					info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+					infoEmpty: 'Mostrando 0 a 0 de 0 registros',
+					infoFiltered: '(filtrado de _MAX_ registros totales)',
+					infoPostFix: '',
+					thousands: ',',
+					lengthMenu: 'Mostrar _MENU_ registros',
+					loadingRecords: 'Cargando...',
+					processing: 'Procesando...',
+					search: 'Buscar:',
+					zeroRecords: 'No se encontraron registros coincidentes',
+					paginate: {
+						first: 'Primero',
+						last: 'Último',
+						next: 'Siguiente',
+						previous: 'Anterior',
+					},
+					aria: {
+						sortAscending: ': activar para ordenar la columna ascendente',
+						sortDescending: ': activar para ordenar la columna descendente',
+					},
+				},
+			};
+
+			$('#taskTableDetail').DataTable(dataTableOptions);
+		}
+	};
+
+	// obtiene la ID del usuario, renderiza la tabla y sus botones
 	const getUserId = async () => {
 		try {
 			const response = await fetch('/api/user/current', {
@@ -112,24 +154,25 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 
 			const data = await response.json();
-			userId = data.userid;
+			userId = data.userid; // obtiene id para otras funciones
 
-			// Llama a la función DisplayTasks solo en user-profile.html
+			// tablas
 			if (document.getElementById('taskDataTable')) {
-				DisplayTasks(userId);
+				await DisplayTasks(data.userid);
+				initializeDataTable();
 
-				// Obtiene la ID de la tarea
+				// botones de tabla
 				document.addEventListener('click', function (event) {
-					// Verificar si se hizo clic en un botón de editar
-					if (event.target.classList.contains('edit-btn')) {
-						taskId = event.target.getAttribute('data-id');
+					const editButton = event.target.closest('.edit-btn');
+					const delButton = event.target.closest('.del-btn');
 
+					// obtiene el id de la tarea al presionar el botón
+					if (editButton) {
+						taskId = editButton.getAttribute('data-id');
 						loadTaskValue(taskId);
 					}
-
-					// Verificar si se hizo clic en un botón de eliminar
-					if (event.target.classList.contains('del-btn')) {
-						taskId = event.target.getAttribute('data-id');
+					if (delButton) {
+						taskId = delButton.getAttribute('data-id');
 					}
 				});
 			}
@@ -152,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const passwordLoginField = document.getElementById('user_pass_login');
 	const passwordEditProfileField = document.getElementById('user_pass_update');
 
-	// Función para mostrar u ocultar password
+	// función para mostrar u ocultar password
 	const togglePasswordField = (passwordField) => {
 		togglePassword.addEventListener('click', function () {
 			const type =
@@ -176,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		togglePasswordField(passwordEditProfileField);
 	}
 
-	// ejecuta función para obtener la ID del usuario
+	// ejecuta función que obtiene el ID del usuario logueado y renderiza tablas con sus botones
 	if (addNewTaskForm || editTaskForm || editProfileForm || taskDataTable) {
 		getUserId();
 	}
@@ -207,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// función para obtener los datos del usuario en editar perfil
+	// función para obtener los datos del usuario para editar su perfil
 	const loadProfileValue = () => {
 		const userFirstName = document.getElementById('user_firstname_update');
 		const userLastName = document.getElementById('user_lastname_update');
@@ -301,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// función para mostrar mensaje de envío erróneo
+	// funciones para mostrar mensaje de envío fallido
 	const saveFailureMessage = () => {
 		localStorage.setItem(
 			'failureMessage',
