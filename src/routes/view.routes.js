@@ -18,7 +18,6 @@ viewRouter.get('/register', (req, res) => {
 	res.sendFile(path.join(__dirname, '../../public/pages', 'register.html'));
 });
 
-// ejemplo de protección de ruta
 viewRouter.get('/profile', authenticateToken, (req, res) => {
 	res.sendFile(path.join(__dirname, '../../public/pages', 'user-profile.html'));
 });
@@ -26,4 +25,11 @@ viewRouter.get('/profile', authenticateToken, (req, res) => {
 viewRouter.get('/editprofile', authenticateToken, (req, res) => {
 	res.sendFile(path.join(__dirname, '../../public/pages', 'edit-profile.html'));
 });
+
+viewRouter.get('/adminprofile', authenticateToken, (req, res) => {
+	res.sendFile(
+		path.join(__dirname, '../../public/pages', 'admin-profile.html')
+	);
+});
+
 export default viewRouter;

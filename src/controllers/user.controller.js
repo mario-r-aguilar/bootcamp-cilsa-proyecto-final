@@ -266,7 +266,11 @@ export const loginUser = async (req, res) => {
 			maxAge: 28800000, // Expira en 8 horas
 		});
 
-		res.status(200).redirect('/profile');
+		if (user.user_name === environment.admin_name) {
+			return res.status(200).redirect('/adminprofile');
+		}
+
+		return res.status(200).redirect('/profile');
 	} catch (error) {
 		console.error(error);
 		res.status(500).send({

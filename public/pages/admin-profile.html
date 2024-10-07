@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="application to manage a task list" />
+		<meta
+			name="keywords"
+			content="task list, web application, manage tasks, lista de tareas, administrar tareas"
+		/>
+		<!-- Bootstrap Styles-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+			crossorigin="anonymous"
+		/>
+		<!-- CSS de DataTables compatible con Bootstrap -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap4.min.css"
+		/>
+
+		<!-- Bootstrap Icons -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+		/>
+		<!-- Own styles -->
+		<link rel="stylesheet" href="../css/main-style.css" />
+
+		<title>Lista de tareas | Administrador</title>
+	</head>
+	<body>
+		<header class="sticky-top">
+			<nav class="navbar navbar-expand-lg bg-dark">
+				<div class="container-fluid">
+					<a
+						class="navbar-brand"
+						href="/adminprofile"
+						title="Link a la página del administrador"
+						aria-label="Link a la página del administrador"
+					>
+						<img
+							src="../img/logo_bco.webp"
+							alt="logo de By Nexus"
+							width="75"
+							height="75"
+						/>
+					</a>
+					<button
+						class="navbar-toggler"
+						type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#navbarNav"
+						aria-controls="navbarNav"
+						aria-expanded="false"
+						aria-label="Toggle navigation"
+					>
+						<i class="text-light bi bi-list"></i>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarNav">
+						<ul class="navbar-nav m-auto">
+							<li class="nav-item">
+								<a
+									class="nav-link"
+									aria-current="page"
+									href="#taskManager"
+									aria-label="Link a la sección para administrar tareas"
+									>Administrar tareas</a
+								>
+							</li>
+
+							<li class="nav-item">
+								<a
+									class="nav-link"
+									aria-current="page"
+									href="#userManager"
+									aria-label="Link a la sección para administrar usuarios"
+									>Administrar usuarios</a
+								>
+							</li>
+
+							<li class="nav-item">
+								<a
+									id="logOutBtn"
+									class="nav-link"
+									href="#"
+									aria-label="Botón para desloguearse de la aplicación"
+									>Desloguearse</a
+								>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+		<main class="mt-5 mb-5">
+			<div class="container">
+				<!-- AQUI VA EL CONTENIDO PRINCIPAL DE LA PÁGINA -->
+
+				<div class="row">
+					<div class="col-12 col-md-6">
+						<span
+							id="successMessage"
+							class="d-none alert alert-success my-2"
+							role="alert"
+						></span>
+
+						<span
+							id="failureMessage"
+							class="d-none alert alert-danger my-2"
+							role="alert"
+						></span>
+					</div>
+
+					<div id="greetingToUser" class="col-12 col-md-6"></div>
+				</div>
+
+				<section class="mb-5">
+					<h2
+						id="taskManager"
+						class="mb-4 mt-3 p-1 text-center bg-dark text-light"
+					>
+						Listado de tareas
+					</h2>
+
+					<button
+						class="btn btn-success btn-sm mb-4"
+						data-bs-toggle="modal"
+						data-bs-target="#addNewTask"
+						title="Abre un formulario para agregar una tarea"
+						aria-label="Abre un formulario para agregar una tarea"
+					>
+						Agregar Tarea
+					</button>
+
+					<div id="taskDataTable" class="table-responsive mt-3">
+						<table
+							id="taskTableDetail"
+							class="table table-striped table-bordered"
+							aria-label="Listado de tareas"
+						>
+							<thead>
+								<tr>
+									<th>Titulo</th>
+									<th>Descripción</th>
+									<th>Nombre</th>
+									<th>Apellido</th>
+									<th>Estado</th>
+									<th>Acciones</th>
+								</tr>
+							</thead>
+							<tbody id="taskTable"></tbody>
+						</table>
+					</div>
+				</section>
+
+				<section class="mt-5">
+					<h2
+						id="userManager"
+						class="mb-4 mt-5 p-1 text-center bg-dark text-light"
+					>
+						Listado de usuarios
+					</h2>
+					<div id="userDataTable" class="table-responsive mt-3">
+						<table
+							id="userTableDetail"
+							class="table table-striped table-bordered"
+							aria-label="Listado de usuarios"
+						>
+							<thead>
+								<tr>
+									<th>ID Usuario</th>
+									<th>Nombre</th>
+									<th>Apellido</th>
+									<th>Username</th>
+									<th>Eliminar</th>
+								</tr>
+							</thead>
+							<tbody id="userTable"></tbody>
+						</table>
+					</div>
+				</section>
+			</div>
+
+			<!-- Modal para agregar tarea -->
+			<div
+				class="modal fade"
+				id="addNewTask"
+				tabindex="-1"
+				aria-labelledby="addNewTaskLabel"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="addNewTaskLabel">Agregar tarea</h5>
+							<button
+								type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Cerrar"
+							></button>
+						</div>
+						<div class="modal-body">
+							<form
+								id="addNewTaskForm"
+								class="shadow border-light border p-4 rounded mb-5"
+								action="/api/task"
+								method="post"
+							>
+								<div class="p-2 m-2">
+									<div class="mb-3 mt-3">
+										<label for="user_id_add" class="form-label"
+											>ID de Usuario:</label
+										>
+										<input
+											type="number"
+											class="form-control border border-dark"
+											id="user_id_add"
+											placeholder="ID de Usuario"
+											name="user_id"
+											title="Introduce el ID del usuario"
+											aria-label="Introduce el ID del usuario"
+											required
+										/>
+										<div class="valid-feedback">Valido.</div>
+										<div class="invalid-feedback">Contenido invalido.</div>
+									</div>
+
+									<div class="mb-3 mt-3">
+										<label for="task_title_add" class="form-label"
+											>Titulo:</label
+										>
+										<input
+											type="text"
+											class="form-control border border-dark"
+											id="task_title_add"
+											placeholder="Titulo de la tarea"
+											name="task_title"
+											title="Introduce un título para la nueva tarea"
+											aria-label="Introduce un título para la nueva tarea"
+											required
+										/>
+										<div class="valid-feedback">Valido.</div>
+										<div class="invalid-feedback">Contenido invalido.</div>
+									</div>
+									<div class="mb-3 mt-3">
+										<label for="task_description_add" class="form-label"
+											>Descripción:</label
+										>
+										<input
+											type="text"
+											class="form-control border border-dark"
+											id="task_description_add"
+											placeholder="Descripción de la tarea "
+											name="task_description"
+											title="Introduce una descripción para la nueva tarea"
+											aria-label="Introduce una descripción para la nueva tarea"
+											required
+										/>
+										<div class="valid-feedback">Valido.</div>
+										<div class="invalid-feedback">Contenido invalido.</div>
+									</div>
+
+									<div
+										style="
+											text-align: center;
+											display: flex;
+											justify-content: center;
+											gap: 10px;
+										"
+									>
+										<button
+											type="submit"
+											class="btn btn-success"
+											title="Agregar una nueva tarea al listado"
+											aria-label="Agregar una nueva tarea al listado"
+										>
+											Agregar
+										</button>
+
+										<button
+											type="button"
+											class="btn btn-secondary"
+											data-bs-dismiss="modal"
+										>
+											Cancelar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="modal-footer"></div>
+				</div>
+			</div>
+
+			<!-- Modal para confirmar edición de tarea -->
+			<div
+				class="modal fade"
+				id="confirmUpdateTask"
+				tabindex="-1"
+				aria-labelledby="confirmUpdateTaskLabel"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="confirmUpdateTaskLabel">
+								Confirmación de Edición de Tarea
+							</h5>
+							<button
+								type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Cerrar"
+							></button>
+						</div>
+						<div class="modal-body">
+							¿Estás seguro de que deseas editar esta tarea?
+						</div>
+						<div class="modal-footer">
+							<button
+								type="button"
+								class="btn btn-secondary"
+								data-bs-dismiss="modal"
+							>
+								Cancelar
+							</button>
+							<button
+								type="button"
+								class="btn btn-primary"
+								id="confirmUpdateBtn"
+								data-bs-toggle="modal"
+								data-bs-target="#editTask"
+							>
+								Aceptar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal para editar tarea -->
+			<div
+				class="modal fade"
+				id="editTask"
+				tabindex="-1"
+				aria-labelledby="editTaskLabel"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="editTaskLabel">Editar Tarea</h5>
+							<button
+								type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Cerrar"
+							></button>
+						</div>
+						<div class="modal-body">
+							<form
+								id="editTaskForm"
+								class="shadow border-light border p-4 rounded mb-3"
+								action="/api/task/:id"
+							>
+								<div class="p-2 m-2">
+									<div class="mb-3 mt-3">
+										<label for="user_id_update" class="form-label"
+											>ID de Usuario:</label
+										>
+										<input
+											type="number"
+											class="form-control border border-dark"
+											id="user_id_update"
+											placeholder="ID de Usuario"
+											name="user_id"
+											title="Edite el ID del usuario"
+											aria-label="Edite el ID del usuario"
+											required
+										/>
+										<div class="valid-feedback">Valido.</div>
+										<div class="invalid-feedback">Contenido invalido.</div>
+									</div>
+
+									<div class="mb-3 mt-3">
+										<label for="task_title_update" class="form-label"
+											>Titulo:</label
+										>
+										<input
+											type="text"
+											class="form-control border border-dark"
+											id="task_title_update"
+											placeholder="Título de la tarea"
+											name="task_title"
+											title="Edite el título de la tarea"
+											aria-label="Edite el título de la tarea"
+											required
+										/>
+										<div class="valid-feedback">Valido.</div>
+										<div class="invalid-feedback">Contenido invalido.</div>
+									</div>
+									<div class="mb-3 mt-3">
+										<label for="task_description_update" class="form-label"
+											>Descripción:</label
+										>
+										<input
+											type="text"
+											class="form-control border border-dark"
+											id="task_description_update"
+											placeholder="Descripción de la tarea "
+											name="task_description"
+											title="Edite la descripción de la tarea"
+											aria-label="Edite la descripción de la tarea"
+											required
+										/>
+										<div class="valid-feedback">Valido.</div>
+										<div class="invalid-feedback">Contenido invalido.</div>
+									</div>
+
+									<div class="mb-3 mt-3">
+										<label for="task_status_update">Estado:</label>
+										<select
+											id="task_status_update"
+											name="task_status"
+											class="form-control border border-dark"
+											title="Edite el estado de la tarea"
+											aria-label="Edite el estado de la tarea"
+										>
+											<option value="" disabled selected>
+												Edite el estado de la tarea
+											</option>
+											<option value="in progress">En curso</option>
+											<option value="pending">Pendiente</option>
+											<option value="blocked">Bloqueada</option>
+											<option value="finished">Finalizada</option>
+										</select>
+									</div>
+								</div>
+								<div
+									style="
+										text-align: center;
+										display: flex;
+										justify-content: center;
+										gap: 10px;
+									"
+								>
+									<button
+										type="submit"
+										class="btn btn-primary"
+										id="saveEditBtn"
+										title="Editar la tarea seleccionada"
+										aria-label="Editar la tarea seleccionada"
+									>
+										Editar tarea
+									</button>
+									<button
+										type="button"
+										class="btn btn-secondary"
+										data-bs-dismiss="modal"
+									>
+										Cancelar
+									</button>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer"></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal para eliminar tarea -->
+			<div
+				class="modal fade"
+				id="deleteTask"
+				tabindex="-1"
+				aria-labelledby="deleteTaskLabel"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="deleteTaskLabel">
+								Confirmación de Eliminación de Tarea
+							</h5>
+							<button
+								type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Cerrar"
+							></button>
+						</div>
+						<div class="modal-body">
+							¿Estás seguro de que deseas eliminar esta tarea?
+						</div>
+						<div class="modal-footer">
+							<button
+								type="button"
+								class="btn btn-secondary"
+								data-bs-dismiss="modal"
+							>
+								Cancelar
+							</button>
+							<button
+								type="button"
+								class="btn btn-danger"
+								id="confirmDeleteBtn"
+								data-bs-toggle="modal"
+								title="Eliminar la tarea seleccionada"
+								aria-label="Eliminar la tarea seleccionada"
+							>
+								Eliminar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal para eliminar usuario -->
+			<div
+				class="modal fade"
+				id="deleteUser"
+				tabindex="-1"
+				aria-labelledby="deleteUserLabel"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="deleteUserLabel">
+								Confirmación de Eliminación de Usuario
+							</h5>
+							<button
+								type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Cerrar"
+							></button>
+						</div>
+						<div class="modal-body">
+							¿Estás seguro de que deseas eliminar este usuario?
+						</div>
+						<div class="modal-footer">
+							<button
+								type="button"
+								class="btn btn-secondary"
+								data-bs-dismiss="modal"
+							>
+								Cancelar
+							</button>
+							<button
+								type="button"
+								class="btn btn-danger"
+								id="confirmDeleteUserBtn"
+								data-bs-toggle="modal"
+								title="Eliminar el usuario seleccionado"
+								aria-label="Eliminar el usuario seleccionado"
+							>
+								Eliminar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<footer>
+			<div class="container-fluid bg-dark text-light py-3">
+				<div class="row text-center">
+					<div class="col-12 col-md-4 mb-3 mb-md-0">
+						<div class="mb-1">
+							<i class="bi bi-github"></i>
+							<a
+								class="footer-link text-light text-decoration-none"
+								href="https://github.com/dardosantana"
+								rel="noopener noreferrer"
+								target="_blank"
+								aria-label="Abre el perfil de GitHub de Dardo Santana, uno de los desarrolladores de este sitio, en otra pestaña"
+								>Dardo Santana</a
+							>
+						</div>
+						<div class="mb-1">
+							<i class="bi bi-github"></i>
+							<a
+								class="footer-link text-light text-decoration-none"
+								href="https://github.com/Lautidelamano"
+								rel="noopener noreferrer"
+								target="_blank"
+								aria-label="Abre el perfil de GitHub de Lautaro de la Mano, uno de los desarrolladores de este sitio, en otra pestaña"
+								>Lautaro de la Mano</a
+							>
+						</div>
+					</div>
+
+					<div
+						class="col-12 col-md-4 mb-3 mb-md-0 d-flex justify-content-center align-items-center"
+					>
+						© Desarrollo 2024
+					</div>
+
+					<div class="col-12 col-md-4 mb-3 mb-md-0">
+						<div class="mb-1">
+							<i class="bi bi-github"></i>
+							<a
+								class="footer-link text-light text-decoration-none"
+								href="https://github.com/Rasta0705"
+								rel="noopener noreferrer"
+								target="_blank"
+								aria-label="Abre el perfil de GitHub de Fernando Barrionuevo, uno de los desarrolladores de este sitio, en otra pestaña"
+								>Fernando Barrionuevo</a
+							>
+						</div>
+						<div class="mb-1">
+							<i class="bi bi-github"></i>
+							<a
+								class="footer-link text-light text-decoration-none"
+								href="https://github.com/mario-r-aguilar"
+								rel="noopener noreferrer"
+								target="_blank"
+								aria-label="Abre el perfil de GitHub de Mario Aguilar, uno de los desarrolladores de este sitio, en otra pestaña"
+								>Mario Aguilar</a
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<!-- Bootstrap 5.2.3 Page Styles -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+			crossorigin="anonymous"
+		></script>
+		<!-- JS de DataTables -->
+		<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+		<!-- Archivo de script propio -->
+		<script src="/js/admin-scripts.js"></script>
+	</body>
+</html>
