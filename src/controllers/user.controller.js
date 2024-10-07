@@ -246,17 +246,18 @@ export const loginUser = async (req, res) => {
 			});
 		}
 
+		const payload = {
+			userid: user.user_id,
+			username: user.user_name,
+			firstname: user.user_firstname,
+			lastname: user.user_lastname,
+			role: user.user_name === environment.admin_name ? 'ADMIN' : 'USER',
+		};
+
 		// crea token de sesión
-		const token = jwt.sign(
-			{
-				userid: user.user_id,
-				username: user.user_name,
-				firstname: user.user_firstname,
-				lastname: user.user_lastname,
-			},
-			environment.jwt_secret,
-			{ expiresIn: '8h' }
-		);
+		const token = jwt.sign(payload, environment.jwt_secret, {
+			expiresIn: '8h',
+		});
 
 		// almacena token en cookie
 		res.cookie('token', token, {
