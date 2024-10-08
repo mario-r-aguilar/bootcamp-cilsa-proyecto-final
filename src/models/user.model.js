@@ -147,7 +147,7 @@ export const updateUser = async (user_id, userData) => {
 		if (!user_id || isNaN(user_id)) {
 			console.error({
 				status: 'error',
-				message: "Invalid user ID (model's error)2",
+				message: "Invalid user ID (model's error)",
 			});
 			return null;
 		}

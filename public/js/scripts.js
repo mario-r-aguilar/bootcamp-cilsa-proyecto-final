@@ -196,8 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const passwordEditProfileField = document.getElementById('user_pass_update');
 
 	// función para mostrar u ocultar password
-	const togglePasswordField = (passwordField) => {
-		togglePassword.addEventListener('click', function () {
+	const togglePasswordField = (passwordField, button) => {
+		button.addEventListener('click', function () {
 			const type =
 				passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
 			passwordField.setAttribute('type', type);
@@ -210,13 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	};
 	if (passwordRegisterField) {
-		togglePasswordField(passwordRegisterField);
+		togglePasswordField(passwordRegisterField, togglePassword);
 	}
 	if (passwordLoginField) {
-		togglePasswordField(passwordLoginField);
+		togglePasswordField(passwordLoginField, togglePassword);
 	}
 	if (passwordEditProfileField) {
-		togglePasswordField(passwordEditProfileField);
+		togglePasswordField(passwordEditProfileField, togglePassword);
 	}
 
 	// ejecuta función que obtiene el ID del usuario logueado y renderiza tablas con sus botones
