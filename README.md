@@ -32,6 +32,7 @@ Además posee una vista de administración para gestionar tareas y usuarios.
 - [Colores](#Colores)
 - [Accesibilidad](#Accesibilidad)
 - [Capturas del Sitio](#Capturas)
+- [Link](#Link)
 - [Contribuir](#Contribuir)
 - [Licencia](#Licencia)
 
@@ -502,7 +503,56 @@ Ejemplo de un error 404 (tarea no encontrada):
 
 ### Despliegue del Servidor
 
-El despliegue se puede realizar usando plataformas como Railway, Render, entre otras asegurándote de configurar correctamente las variables de entorno.
+Como se trata de un proyecto de práctica, alojamos el servidor en [**Glitch**](https://glitch.com/) que permite deployar proyectos **Node.js** tradicionales. En cuanto a la base de datos, la alojamos en [**FreeSQLdatabase**](https://www.freesqldatabase.com/). En ambos casos utilizamos planes gratuitos que poseen ciertas limitaciones. Sin embargo, el proyecto puede ser deployado en otras plataformas como Render, Railway, entre otras.
+
+Para poder deployar el servidor en Glitch es necesario agregar una configuración en el package.json (puedes hacerlo directamente en la plataforma):
+
+```
+"engines": {
+    "node": ">=14.17.6"
+  },
+```
+
+y luego agregar las variables de entorno en el archivo .env que se te genera en la plataforma luego de subir tu proyecto desde GitHub. Una limitación que posee esta plataforma es que si realizas cambios en tu repositorio luego de haberlo subido, estos cambios no se reflejaran, deberás agregarlos manualmente.
+
+Con respecto a la base de datos, si deseas alojarla en FreeSQLdatabase, tendrás que modificar la query. En este caso y dado que la base de datos es creada por la plataforma, solo modificaremos la forma de crear las tablas. Estos cambios aplican para todos aquellos hosting que poseen una versión antigua de MySQL.
+
+```
+-- Creación de la tabla usuario
+CREATE TABLE user_table (
+    user_id INT NOT NULL AUTO_INCREMENT,
+    user_name VARCHAR(100) NOT NULL,
+    user_pass VARCHAR(255) NOT NULL,
+    user_firstname VARCHAR(100) NOT NULL,
+    user_lastname VARCHAR(100) NOT NULL,
+    PRIMARY KEY (user_id),
+    UNIQUE KEY (user_name)
+);
+
+-- Creación de la tabla tarea
+CREATE TABLE task_table (
+    task_id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    task_title VARCHAR(255) NOT NULL,
+    task_description VARCHAR(255) NOT NULL,
+    task_date_created DATETIME,
+    task_date_modify TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    task_status VARCHAR(50) NOT NULL,
+    PRIMARY KEY (task_id),
+    FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+);
+```
+
+Asimismo tendrás que cambiar algunas líneas en el archivo **task.model.js**, más precisamente en la función **createTask** para que al agregar una tarea, se contemplen los cambios realizados en la creación de las tablas.
+
+```
+const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+const [newTask] = await connection.execute(
+  'INSERT INTO task_table (user_id, task_title, task_description, task_date_created, task_status) VALUES (?, ?, ?, ?, ?)',
+  [user_id, task_title, task_description, now, task_status]
+);
+```
 
 [Ir al Indice](#Indice)
 
@@ -624,6 +674,8 @@ Asimismo se verificó la estructura HTML con **W3C Markup Validation Service** p
 
 ### Capturas
 
+Hay que tener en cuenta que los diseños originales, usados al momento de realizar esta documentación, pueden variar en relación a la versión actual del proyecto.
+
 ### Vista de usuario
 
 **Inicio**
@@ -663,6 +715,12 @@ Asimismo se verificó la estructura HTML con **W3C Markup Validation Service** p
 ### Funcionamiento
 
 ![muestra una imagen animada con todo el funcionamiento del sitio web](./public/img/proyect-docs/funcionamiento.gif)
+
+[Ir al Indice](#Indice)
+
+## Link
+
+Puedes acceder a la versión navegable haciendo click [AQUÍ](https://to-do-list-bootcamp.glitch.me/)
 
 [Ir al Indice](#Indice)
 

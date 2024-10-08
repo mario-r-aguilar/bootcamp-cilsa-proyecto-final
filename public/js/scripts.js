@@ -196,8 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const passwordEditProfileField = document.getElementById('user_pass_update');
 
 	// función para mostrar u ocultar password
-	const togglePasswordField = (passwordField) => {
-		togglePassword.addEventListener('click', function () {
+	const togglePasswordField = (passwordField, button) => {
+		button.addEventListener('click', function () {
 			const type =
 				passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
 			passwordField.setAttribute('type', type);
@@ -210,13 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	};
 	if (passwordRegisterField) {
-		togglePasswordField(passwordRegisterField);
+		togglePasswordField(passwordRegisterField, togglePassword);
 	}
 	if (passwordLoginField) {
-		togglePasswordField(passwordLoginField);
+		togglePasswordField(passwordLoginField, togglePassword);
 	}
 	if (passwordEditProfileField) {
-		togglePasswordField(passwordEditProfileField);
+		togglePasswordField(passwordEditProfileField, togglePassword);
 	}
 
 	// ejecuta función que obtiene el ID del usuario logueado y renderiza tablas con sus botones
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const logOutBtn = document.getElementById('logOutBtn');
 	if (logOutBtn) {
 		logOutBtn.addEventListener('click', () => {
-			userLogOut('/');
+			userLogOut('/login');
 		});
 	}
 
@@ -380,13 +380,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		inputs.forEach((input) => {
 			const value = input.value.trim();
-			const feedback = input.nextElementSibling;
+			const feedbackContainer = input.closest('.mb-3');
+			const validFeedback = feedbackContainer.querySelector('.valid-feedback');
+			const invalidFeedback =
+				feedbackContainer.querySelector('.invalid-feedback');
 
 			if (value === '') {
-				feedback.textContent = 'El campo no puede estar vacío';
-				feedback.classList.remove('valid-feedback');
-				feedback.classList.add('invalid-feedback');
+				invalidFeedback.textContent = 'El campo no puede estar vacío';
 				input.classList.add('is-invalid');
+				input.classList.remove('is-valid');
 				isValid = false;
 			} else if (
 				input.type === 'text' &&
@@ -394,20 +396,19 @@ document.addEventListener('DOMContentLoaded', () => {
 				input.name !== 'user_pass' &&
 				/\d/.test(value)
 			) {
-				feedback.textContent = 'El campo no puede contener números';
-				feedback.classList.remove('valid-feedback');
-				feedback.classList.add('invalid-feedback');
+				invalidFeedback.textContent = 'El campo no puede contener números';
 				input.classList.add('is-invalid');
+				input.classList.remove('is-valid');
 				isValid = false;
 			} else if (
 				input.type === 'text' &&
 				input.name === 'user_name' &&
 				value.length < 8
 			) {
-				feedback.textContent = 'El username debe tener al menos 8 caracteres';
-				feedback.classList.remove('valid-feedback');
-				feedback.classList.add('invalid-feedback');
+				invalidFeedback.textContent =
+					'El username debe tener al menos 8 caracteres';
 				input.classList.add('is-invalid');
+				input.classList.remove('is-valid');
 				isValid = false;
 			} else if (
 				input.type === 'password' &&
@@ -416,16 +417,13 @@ document.addEventListener('DOMContentLoaded', () => {
 					!/\d/.test(value) ||
 					!/[!@#$%^&*]/.test(value))
 			) {
-				feedback.textContent =
+				invalidFeedback.textContent =
 					'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, un número y un símbolo';
-				feedback.classList.remove('valid-feedback');
-				feedback.classList.add('invalid-feedback');
 				input.classList.add('is-invalid');
+				input.classList.remove('is-valid');
 				isValid = false;
 			} else {
-				feedback.textContent = 'Válido.';
-				feedback.classList.remove('invalid-feedback');
-				feedback.classList.add('valid-feedback');
+				validFeedback.textContent = 'Válido.';
 				input.classList.remove('is-invalid');
 				input.classList.add('is-valid');
 			}
