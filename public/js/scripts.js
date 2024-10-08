@@ -391,6 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			} else if (
 				input.type === 'text' &&
 				input.name !== 'user_name' &&
+				input.name !== 'user_pass' &&
 				/\d/.test(value)
 			) {
 				feedback.textContent = 'El campo no puede contener números';
